@@ -57,7 +57,7 @@ if(navigator.share){try{await navigator.share({text:body});return}catch(e){if(e.
 location.href='sms:&body='+encodeURIComponent(body);
 };
 $('undo').onclick=()=>{const prev=history.pop();if(!prev){notify('No recent tap to undo');return}data.counts[prev.name]=prev.value;$('n-'+prev.name.replace(' ','-')).textContent=prev.value;save();notify('Undid '+prev.name)};
-$('reset').onclick=()=>{if(!confirm('Reset all Mix and unload counts to zero? Tank pounds and AMD will be kept.'))return;ids.forEach(id=>{data.counts[id]=0;$('n-'+id.replace(' ','-')).textContent='0'});history=[];save();notify('Counts reset')};
+$('reset').onclick=()=>{if(!confirm('Reset all Mix counts, unload counts, tank pounds, and AMD to zero?'))return;ids.forEach(id=>{data.counts[id]=0;$('n-'+id.replace(' ','-')).textContent='0'});data.pounds='0';data.amd='0';$('pounds').value='0';$('amd').value='0';history=[];save();notify('All values reset')};
 $('export').onclick=()=>{const date=new Date().toISOString();const rows=[['Timestamp','Mix 1','Mix 2','Mix 3','Pounds','AMD %','AA','NA','AN'],[date,...ids.slice(0,3).map(k=>data.counts[k]),data.pounds,data.amd,...ids.slice(3).map(k=>data.counts[k])]];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='tank-counter-'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('CSV exported')};
 if('serviceWorker' in navigator && /^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn(e));
 })();
