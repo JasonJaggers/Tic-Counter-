@@ -23,7 +23,7 @@
 <div class="field"><label for="amd">AMD</label><input id="amd" inputmode="decimal" type="number" min="0" max="100" step="any" placeholder="0"><div class="suffix">%</div></div>
 </div>
 <h2>Unload Counts</h2><div class="grid3" id="trucks"></div>
-<footer><button type="button" class="action" id="undo">↶ Undo tap</button><button type="button" class="action" id="export">↓ Export CSV</button><button type="button" class="action danger" id="reset">Reset counts</button></footer>
+<footer><button type="button" class="action" id="share">↗ Share</button><button type="button" class="action" id="undo">↶ Undo tap</button><button type="button" class="action" id="export">↓ Export CSV</button><button type="button" class="action danger" id="reset">Reset counts</button></footer>
 <p class="notice">Counts are saved automatically on this device. For reliability, export a backup at the end of your shift. Clearing browser or website data can erase locally saved values. This is a personal tally, not an official process or inventory record.</p>
 </main><div role="status" aria-live="polite" id="toast"></div>
 <script>
@@ -42,6 +42,20 @@ const build=(parent,names)=>names.forEach(name=>{const card=document.createEleme
 build($('mix'),ids.slice(0,3));build($('trucks'),ids.slice(3));
 $('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
 for(const field of ['pounds','amd']){const input=$(field);input.value=data[field];input.addEventListener('input',()=>{data[field]=input.value;save()});}
+$('share').onclick=async()=>{
+const lines=['Tank Counter — '+new Date().toLocaleString(),
+'Mix 1: '+data.counts['Mix 1'],
+'Mix 2: '+data.counts['Mix 2'],
+'Mix 3: '+data.counts['Mix 3'],
+'Tank: '+(data.pounds===''?'—':data.pounds+' lb'),
+'AMD: '+(data.amd===''?'—':data.amd+'%'),
+'AA: '+data.counts.AA,
+'NA: '+data.counts.NA,
+'AN: '+data.counts.AN];
+const body=lines.join('\n');
+if(navigator.share){try{await navigator.share({text:body});return}catch(e){if(e.name==='AbortError')return;}}
+location.href='sms:&body='+encodeURIComponent(body);
+};
 $('undo').onclick=()=>{const prev=history.pop();if(!prev){notify('No recent tap to undo');return}data.counts[prev.name]=prev.value;$('n-'+prev.name.replace(' ','-')).textContent=prev.value;save();notify('Undid '+prev.name)};
 $('reset').onclick=()=>{if(!confirm('Reset all Mix and unload counts to zero? Tank pounds and AMD will be kept.'))return;ids.forEach(id=>{data.counts[id]=0;$('n-'+id.replace(' ','-')).textContent='0'});history=[];save();notify('Counts reset')};
 $('export').onclick=()=>{const date=new Date().toISOString();const rows=[['Timestamp','Mix 1','Mix 2','Mix 3','Pounds','AMD %','AA','NA','AN'],[date,...ids.slice(0,3).map(k=>data.counts[k]),data.pounds,data.amd,...ids.slice(3).map(k=>data.counts[k])]];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='tank-counter-'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('CSV exported')};
