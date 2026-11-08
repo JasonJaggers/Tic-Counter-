@@ -1,6 +1,6 @@
 {
-  "name": "Sterling Line 1",
-  "short_name": "Sterling Line 1",
+  "name": "STERLING SPECIALTY",
+  "short_name": "STERLING SPECIALTY",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -8,7 +8,7 @@
   "theme_color": "#0b121b",
   "icons": [
     {
-      "src": "tank-icon-180.png",
+      "src": "sterling-specialty-icon.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
