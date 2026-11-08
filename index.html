@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b121b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tank Counter">
+<meta name="description" content="Offline shift tank and truck counter">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Tank Counter</title>
+<style>
+:root{color-scheme:dark;--bg:#0b121b;--card:#172534;--card2:#213448;--accent:#73bbff;--text:#f4f8ff;--muted:#a9c0d5;--border:#31465b}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding:calc(env(safe-area-inset-top) + 18px) 16px calc(env(safe-area-inset-bottom) + 25px)}main{max-width:540px;margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}h1{font-size:26px;letter-spacing:-.7px;margin:0}.small{font-size:12px;color:var(--muted)}h2{font-size:14px;letter-spacing:.08em;color:var(--muted);font-weight:700;text-transform:uppercase;margin:22px 0 10px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{border:1px solid var(--border);background:var(--card);border-radius:18px;min-width:0;padding:14px 10px;display:flex;align-items:center;flex-direction:column;gap:12px;touch-action:manipulation}.tile .name{font-size:15px;font-weight:650;color:#c3d6e7}.tile .count{font-weight:750;font-size:38px;line-height:1;font-variant-numeric:tabular-nums}.plus{width:100%;min-height:48px;background:#244564;color:#a9dcff;border:1px solid #47779c;border-radius:12px;font-size:27px;font-weight:600;cursor:pointer}.plus:active{background:#35658c;transform:scale(.98)}.field{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:15px}.field label{display:block;font-size:13px;font-weight:650;color:var(--muted);margin-bottom:9px}.field input{width:100%;font-size:25px;font-weight:700;border-radius:10px;border:1px solid #45617b;background:#0e1925;color:white;padding:10px 8px;outline:0;min-width:0}.field input:focus{border-color:var(--accent)}.field .suffix{font-weight:500;font-size:13px;color:var(--muted);margin-top:7px}footer{display:flex;gap:9px;flex-wrap:wrap;margin-top:25px}button.action{border-radius:12px;border:1px solid var(--border);padding:12px 14px;background:var(--card2);color:var(--text);font-size:14px;font-weight:600;cursor:pointer}.action.danger{color:#ffb9b9}.notice{font-size:12px;color:var(--muted);line-height:1.5;margin-top:20px}#toast{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 15px);left:50%;transform:translateX(-50%);background:#344d63;color:#fff;border-radius:18px;padding:10px 16px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;white-space:nowrap}#toast.show{opacity:1}.subtitle{margin-top:5px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body><main>
+<header><div><h1>Tank Counter</h1><div class="subtitle" id="today"></div></div><span class="small" id="status">Saved on this device</span></header>
+<h2>Mix Counts</h2><div class="grid3" id="mix"></div>
+<h2>Tank</h2><div class="grid2">
+<div class="field"><label for="pounds">Total pounds</label><input id="pounds" inputmode="decimal" type="number" min="0" step="any" placeholder="0"><div class="suffix">lb</div></div>
+<div class="field"><label for="amd">AMD</label><input id="amd" inputmode="decimal" type="number" min="0" max="100" step="any" placeholder="0"><div class="suffix">%</div></div>
+</div>
+<h2>Unload Counts</h2><div class="grid3" id="trucks"></div>
+<footer><button type="button" class="action" id="undo">↶ Undo tap</button><button type="button" class="action" id="export">↓ Export CSV</button><button type="button" class="action danger" id="reset">Reset counts</button></footer>
+<p class="notice">Counts are saved automatically on this device. For reliability, export a backup at the end of your shift. Clearing browser or website data can erase locally saved values. This is a personal tally, not an official process or inventory record.</p>
+</main><div role="status" aria-live="polite" id="toast"></div>
+<script>
+(()=>{'use strict';
+const KEY='tank-counter-v1';const ids=['Mix 1','Mix 2','Mix 3','AA','NA','AN'];
+const fresh=()=>({counts:Object.fromEntries(ids.map(x=>[x,0])),pounds:'',amd:''});
+let data=fresh();let history=[];let toastTimer;
+try{const old=JSON.parse(localStorage.getItem(KEY));if(old&&typeof old==='object'){
+for(const id of ids){let n=Number(old.counts?.[id]);if(Number.isSafeInteger(n)&&n>=0)data.counts[id]=n;}
+for(const k of ['pounds','amd'])if(typeof old[k]==='string'||typeof old[k]==='number')data[k]=String(old[k]);
+}}catch(e){console.warn('Storage not available',e)}
+const $=id=>document.getElementById(id);
+const notify=msg=>{const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),1800)};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));$('status').textContent='Saved on this device'}catch(e){$('status').textContent='⚠ Save unavailable';notify('Storage unavailable — export a backup')}};
+const build=(parent,names)=>names.forEach(name=>{const card=document.createElement('div');card.className='tile';const title=document.createElement('div');title.className='name';title.textContent=name;const value=document.createElement('div');value.className='count';value.id='n-'+name.replace(' ','-');value.textContent=String(data.counts[name]);const button=document.createElement('button');button.type='button';button.className='plus';button.setAttribute('aria-label','Add one to '+name);button.textContent='+';button.onclick=()=>{history.push({name,value:data.counts[name]});if(history.length>30)history.shift();data.counts[name]++;value.textContent=data.counts[name];save()};card.append(title,value,button);parent.append(card)});
+build($('mix'),ids.slice(0,3));build($('trucks'),ids.slice(3));
+$('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+for(const field of ['pounds','amd']){const input=$(field);input.value=data[field];input.addEventListener('input',()=>{data[field]=input.value;save()});}
+$('undo').onclick=()=>{const prev=history.pop();if(!prev){notify('No recent tap to undo');return}data.counts[prev.name]=prev.value;$('n-'+prev.name.replace(' ','-')).textContent=prev.value;save();notify('Undid '+prev.name)};
+$('reset').onclick=()=>{if(!confirm('Reset all Mix and unload counts to zero? Tank pounds and AMD will be kept.'))return;ids.forEach(id=>{data.counts[id]=0;$('n-'+id.replace(' ','-')).textContent='0'});history=[];save();notify('Counts reset')};
+$('export').onclick=()=>{const date=new Date().toISOString();const rows=[['Timestamp','Mix 1','Mix 2','Mix 3','Pounds','AMD %','AA','NA','AN'],[date,...ids.slice(0,3).map(k=>data.counts[k]),data.pounds,data.amd,...ids.slice(3).map(k=>data.counts[k])]];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='tank-counter-'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('CSV exported')};
+if('serviceWorker' in navigator && /^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn(e));
+})();
+</script></body></html>
