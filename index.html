@@ -8,8 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="STERLING SPECIALTY">
 <meta name="description" content="Offline shift tank and truck counter">
-<link rel="manifest" href="manifest.webmanifest?v=5">
-<link rel="apple-touch-icon" sizes="180x180" href="sterling-specialty-icon.png?v=5">
+<link rel="manifest" href="manifest.webmanifest?v=6">
+<link rel="apple-touch-icon" sizes="180x180" href="sterling-specialty-icon-full.png?v=6">
 <title>STERLING SPECIALTY</title>
 <style>
 :root{color-scheme:dark;--bg:#0b121b;--card:#172534;--card2:#213448;--accent:#73bbff;--text:#f4f8ff;--muted:#a9c0d5;--border:#31465b}
@@ -18,10 +18,11 @@
 .maintenance-link{display:block;margin-top:22px;text-align:center;text-decoration:none;background:#244564;border:1px solid #47779c;color:#d6eeff;padding:16px;border-radius:14px;font-size:16px;font-weight:700;touch-action:manipulation}.maintenance-link:active{background:#35658c}
 .levels-section{margin-top:27px;padding-top:9px;border-top:1px solid var(--border)}.level-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.level-tile{background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:11px 6px;gap:8px;min-width:0}.level-tile .level-name{font-size:13px;font-weight:700;color:var(--muted)}.level-input-wrap{display:flex;align-items:center;width:100%;background:#0e1925;border:1px solid #45617b;border-radius:10px;padding:7px 3px;gap:1px}.level-input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text);font-size:21px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;appearance:textfield;-moz-appearance:textfield}.level-input::-webkit-inner-spin-button,.level-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.level-input-wrap:focus-within{border-color:var(--accent)}.level-unit{font-size:13px;color:var(--muted);padding-right:3px}.level-actions{display:flex;gap:9px;margin-top:12px}.level-actions .action{flex:1}.level-share{background:#244564!important;color:#d6eeff!important}
 header h1{font-size:clamp(18px,5.6vw,26px)}
+.brand-header{display:flex;align-items:center;justify-content:flex-start;gap:11px;padding:4px 0 13px;border-bottom:1px solid var(--border)}.brand-logo{width:51px;height:51px;object-fit:cover;border-radius:12px;flex:none}.brand-heading{min-width:0;flex:1}.brand-heading h1{font-size:clamp(17px,5.1vw,25px);letter-spacing:-.55px;white-space:nowrap;margin:0}.brand-heading .subtitle{margin-top:4px}
 </style>
 </head>
 <body><main>
-<header><div><h1>STERLING SPECIALTY</h1><div class="subtitle" id="today"></div></div><span class="small" id="status">Saved on this device</span></header>
+<header class="brand-header"><img class="brand-logo" src="sterling-specialty-icon-full.png" alt="Sterling logo"><div class="brand-heading"><h1>STERLING SPECIALTY</h1><div class="subtitle" id="today"></div></div></header>
 <h2>Mix Counts</h2><div class="grid3" id="mix"></div>
 <h2>Hold Tank</h2><div class="grid2">
 <div class="field"><label for="pounds">Total pounds</label><input id="pounds" inputmode="decimal" type="number" min="0" step="any" placeholder="0"><div class="suffix">lb</div></div>
@@ -58,7 +59,7 @@ for(const k of ['pounds','amd'])if(typeof old[k]==='string'||typeof old[k]==='nu
 }}catch(e){console.warn('Storage not available',e)}
 const $=id=>document.getElementById(id);
 const notify=msg=>{const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),1800)};
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));$('status').textContent='Saved on this device'}catch(e){$('status').textContent='⚠ Save unavailable';notify('Storage unavailable — export a backup')}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){notify('Storage unavailable — export a backup')}};
 const build=(parent,names)=>names.forEach(name=>{const card=document.createElement('div');card.className='tile';const title=document.createElement('div');title.className='name';title.textContent=name;const value=document.createElement('div');value.className='count';value.id='n-'+name.replace(' ','-');value.textContent=String(data.counts[name]);const button=document.createElement('button');button.type='button';button.className='plus';button.setAttribute('aria-label','Add one to '+name);button.textContent='+';button.onclick=()=>{history.push({name,value:data.counts[name]});if(history.length>30)history.shift();data.counts[name]++;value.textContent=data.counts[name];save()};card.append(title,value,button);parent.append(card)});
 build($('mix'),ids.slice(0,3));build($('trucks'),ids.slice(3));
 $('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});

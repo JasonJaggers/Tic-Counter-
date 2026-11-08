@@ -8,7 +8,7 @@
   "theme_color": "#0b121b",
   "icons": [
     {
-      "src": "sterling-specialty-icon.png",
+      "src": "sterling-specialty-icon-full.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
