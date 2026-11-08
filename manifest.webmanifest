@@ -8,10 +8,16 @@
   "theme_color": "#0b121b",
   "icons": [
     {
-      "src": "icon.svg",
+      "src": "tank-icon.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "tank-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
