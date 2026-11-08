@@ -16,6 +16,7 @@
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding:calc(env(safe-area-inset-top) + 18px) 16px calc(env(safe-area-inset-bottom) + 25px)}main{max-width:540px;margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}h1{font-size:26px;letter-spacing:-.7px;margin:0}.small{font-size:12px;color:var(--muted)}h2{font-size:14px;letter-spacing:.08em;color:var(--muted);font-weight:700;text-transform:uppercase;margin:22px 0 10px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{border:1px solid var(--border);background:var(--card);border-radius:18px;min-width:0;padding:14px 10px;display:flex;align-items:center;flex-direction:column;gap:12px;touch-action:manipulation}.tile .name{font-size:15px;font-weight:650;color:#c3d6e7}.tile .count{font-weight:750;font-size:38px;line-height:1;font-variant-numeric:tabular-nums}.plus{width:100%;min-height:48px;background:#244564;color:#a9dcff;border:1px solid #47779c;border-radius:12px;font-size:27px;font-weight:600;cursor:pointer}.plus:active{background:#35658c;transform:scale(.98)}.field{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:15px}.field label{display:block;font-size:13px;font-weight:650;color:var(--muted);margin-bottom:9px}.field input{width:100%;font-size:25px;font-weight:700;border-radius:10px;border:1px solid #45617b;background:#0e1925;color:white;padding:10px 8px;outline:0;min-width:0}.field input:focus{border-color:var(--accent)}.field .suffix{font-weight:500;font-size:13px;color:var(--muted);margin-top:7px}footer{display:flex;gap:9px;flex-wrap:wrap;margin-top:25px}button.action{border-radius:12px;border:1px solid var(--border);padding:12px 14px;background:var(--card2);color:var(--text);font-size:14px;font-weight:600;cursor:pointer}.action.danger{color:#ffb9b9}.notice{font-size:12px;color:var(--muted);line-height:1.5;margin-top:20px}#toast{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 15px);left:50%;transform:translateX(-50%);background:#344d63;color:#fff;border-radius:18px;padding:10px 16px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;white-space:nowrap}#toast.show{opacity:1}.subtitle{margin-top:5px;color:var(--muted);font-size:13px}
 .conversion{margin-top:27px;padding-top:6px;border-top:1px solid var(--border)}.calc-btn{width:100%;margin-top:10px;background:#244564!important;border-color:#47779c!important;color:#d6eeff!important;min-height:50px}
 .maintenance-link{display:block;margin-top:22px;text-align:center;text-decoration:none;background:#244564;border:1px solid #47779c;color:#d6eeff;padding:16px;border-radius:14px;font-size:16px;font-weight:700;touch-action:manipulation}.maintenance-link:active{background:#35658c}
+.levels-section{margin-top:27px;padding-top:9px;border-top:1px solid var(--border)}.level-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.level-tile{background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;align-items:center;padding:11px 6px;gap:8px;min-width:0}.level-tile .level-name{font-size:13px;font-weight:700;color:var(--muted)}.level-tile .level-number{font-size:27px;font-weight:750;font-variant-numeric:tabular-nums;color:var(--text)}.level-tile .level-plus{background:#244564;border:1px solid #47779c;color:#a9dcff;border-radius:10px;min-height:43px;width:100%;font-size:26px;font-weight:600;touch-action:manipulation}.level-actions{display:flex;gap:9px;margin-top:12px}.level-actions .action{flex:1}.level-share{background:#244564!important;color:#d6eeff!important}
 </style>
 </head>
 <body><main>
@@ -36,6 +37,14 @@
 <a id="maintenance-request" class="maintenance-link" href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYjYirSKb_9RJnPVbEZGRGXVUOVlHOFhDN1RGUkJZVFNDSjI5NFM0WjJaNC4u&amp;origin=QRCode&amp;route=shorturl" target="_blank" rel="noopener noreferrer">Maintenance Request ↗</a>
 <a id="bbs-request" class="maintenance-link" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYvc20LGvfjhIt1-2If4mnyNUMVdXTzU4VVg1V0Y2N0JMME1BS1lKQzVZSy4u&amp;origin=QRCode" target="_blank" rel="noopener noreferrer">BBS ↗</a>
 <a id="hazards-request" class="maintenance-link" href="https://app.industrysafe.com/default.asp?__hstc=108400413.b5ab5a05ea64dff45301da1252f9e8e6.1685735468245.1732722102562.1732744063648.841&amp;__hssc=108400413.5.1732744063648&amp;__hsfp=2522753148" target="_blank" rel="noopener noreferrer">Vector ↗</a>
+<section class="levels-section" aria-label="Levels counters">
+<h2>Levels</h2>
+<div class="level-grid" id="level-counters"></div>
+<div class="level-actions">
+<button type="button" class="action level-share" id="share-levels">↗ Share Levels</button>
+<button type="button" class="action danger" id="reset-levels">Reset Levels</button>
+</div>
+</section>
 </main><div role="status" aria-live="polite" id="toast"></div>
 <script>
 (()=>{'use strict';
@@ -74,6 +83,41 @@ $('reset').onclick=()=>{if(!confirm('Reset all Mix counts, unload counts, tank p
 $('export').onclick=()=>{const date=new Date().toISOString();const rows=[['Timestamp','Mix 1','Mix 2','Mix 3','Pounds','AMD %','AA','NA','AN'],[date,...ids.slice(0,3).map(k=>data.counts[k]),data.pounds,data.amd,...ids.slice(3).map(k=>data.counts[k])]];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='tank-counter-'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('CSV exported')};
 $('calculate').onclick=()=>{const input=$('mix-input');const raw=input.value.trim();if(raw===''){notify('Enter pounds first');input.focus();return}const pounds=Number(raw);if(!Number.isFinite(pounds)||pounds<0){notify('Enter a valid pounds value');return}input.value=String(Math.round(pounds/2.2046226218487757));input.blur()};
 $('mix-input').addEventListener('keydown',event=>{if(event.key==='Enter'){$('calculate').click();$('mix-input').blur()}});
+// Levels are stored separately from Mix, Hold Tank, and Unload counters.
+const LEVEL_KEY='sterling-line1-levels-v1';
+const levelNames=['AMD','AA','NA','AN'];
+const levels=Object.fromEntries(levelNames.map(name=>[name,0]));
+try{
+  const stored=JSON.parse(localStorage.getItem(LEVEL_KEY));
+  if(stored&&typeof stored==='object')for(const name of levelNames){
+    const value=Number(stored[name]);
+    if(Number.isSafeInteger(value)&&value>=0)levels[name]=value;
+  }
+}catch(e){console.warn('Levels storage unavailable',e)}
+const saveLevels=()=>{try{localStorage.setItem(LEVEL_KEY,JSON.stringify(levels))}catch(e){notify('Could not save Levels')}};
+const levelGrid=$('level-counters');
+levelNames.forEach(name=>{
+  const tile=document.createElement('div');tile.className='level-tile';
+  const label=document.createElement('div');label.className='level-name';label.textContent=name;
+  const num=document.createElement('div');num.className='level-number';num.id='level-'+name;num.textContent=String(levels[name]);
+  const plus=document.createElement('button');plus.type='button';plus.className='level-plus';plus.textContent='+';
+  plus.setAttribute('aria-label','Add one to Levels '+name);
+  plus.onclick=()=>{if(levels[name]>=Number.MAX_SAFE_INTEGER){notify('Counter limit reached');return}levels[name]++;num.textContent=String(levels[name]);saveLevels()};
+  tile.append(label,num,plus);levelGrid.append(tile);
+});
+$('share-levels').onclick=async()=>{
+  const populated=levelNames.filter(name=>levels[name]>0);
+  if(!populated.length){notify('No Levels recorded to share');return}
+  const body=['Sterling Line 1 — Levels',new Date().toLocaleString(),'',
+    ...populated.map(name=>name+': '+levels[name])].join('\n');
+  if(navigator.share){try{await navigator.share({text:body});return}catch(e){if(e.name==='AbortError')return}}
+  location.href='sms:&body='+encodeURIComponent(body);
+};
+$('reset-levels').onclick=()=>{
+  if(!confirm('Reset AMD, AA, NA and AN Levels counts to zero?'))return;
+  levelNames.forEach(name=>{levels[name]=0;$('level-'+name).textContent='0'});
+  saveLevels();notify('Levels reset');
+};
 if('serviceWorker' in navigator && /^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn(e));
 })();
 </script></body></html>
