@@ -67,14 +67,7 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 <div class="field"><label for="amd">AMD</label><input id="amd" inputmode="decimal" type="number" min="0" max="100" step="any" placeholder="0"><div class="suffix">%</div></div>
 </div>
 <h2>Unload Counts</h2><div class="grid3" id="trucks"></div>
-<section class="levels-section" aria-label="Levels counters">
-<h2>Levels</h2>
-<div class="level-grid" id="level-counters"></div>
-<div class="level-actions">
-<button type="button" class="action level-share" id="share-levels">↗ Share Levels</button>
-<button type="button" class="action danger" id="reset-levels">Reset Levels</button>
-</div>
-</section>
+
 <footer><button type="button" class="action" id="share">↗ Share</button><button type="button" class="action" id="undo">↶ Undo tap</button><button type="button" class="action" id="export">↓ Export CSV</button><button type="button" class="action danger" id="reset">Reset counts</button></footer>
 
 
@@ -83,6 +76,14 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 <a id="bbs-request" class="maintenance-link" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYvc20LGvfjhIt1-2If4mnyNUMVdXTzU4VVg1V0Y2N0JMME1BS1lKQzVZSy4u&amp;origin=QRCode" target="_blank" rel="noopener noreferrer">BBS ↗</a>
 <a id="hazards-request" class="maintenance-link" href="https://app.industrysafe.com/default.asp?__hstc=108400413.b5ab5a05ea64dff45301da1252f9e8e6.1685735468245.1732722102562.1732744063648.841&amp;__hssc=108400413.5.1732744063648&amp;__hsfp=2522753148" target="_blank" rel="noopener noreferrer">Vector ↗</a>
 </nav>
+<section class="levels-section" aria-label="Levels counters">
+<h2>Levels</h2>
+<div class="level-grid" id="level-counters"></div>
+<div class="level-actions">
+<button type="button" class="action level-share" id="share-levels">↗ Share Levels</button>
+<button type="button" class="action danger" id="reset-levels">Reset Levels</button>
+</div>
+</section>
 
 </main><div role="status" aria-live="polite" id="toast"></div>
 <script>
