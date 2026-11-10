@@ -67,6 +67,12 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 #report-request.report-done{background:#17673c!important;border-color:#43b878!important;color:#fff!important}
 #report-request.report-pending:active{background:#aa3240}
 #report-request.report-done:active{background:#1b814a}
+.quick-links #adp-request{grid-column:1/-1;min-height:44px;background:#26394f}
+.calendar-section{margin-top:19px;border-top:1px solid var(--border);padding-top:4px}
+.calendar-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.calendar-heading a{font-size:12px;color:#a9dcff;text-decoration:none}
+.calendar-section iframe{display:block;width:100%;height:285px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.calendar-hint{font-size:11px;line-height:1.45;color:var(--muted);margin:8px 0 0}
 </style>
 </head>
 <body><main>
@@ -81,6 +87,7 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 <a id="maintenance-request" class="maintenance-link" href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYjYirSKb_9RJnPVbEZGRGXVUOVlHOFhDN1RGUkJZVFNDSjI5NFM0WjJaNC4u&amp;origin=QRCode&amp;route=shorturl" target="_blank" rel="noopener noreferrer">Maintenance Request</a>
 <a id="bbs-request" class="maintenance-link" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYvc20LGvfjhIt1-2If4mnyNUMVdXTzU4VVg1V0Y2N0JMME1BS1lKQzVZSy4u&amp;origin=QRCode" target="_blank" rel="noopener noreferrer">BBS</a>
 <a id="hazards-request" class="maintenance-link" href="https://app.industrysafe.com/default.asp?__hstc=108400413.b5ab5a05ea64dff45301da1252f9e8e6.1685735468245.1732722102562.1732744063648.841&amp;__hssc=108400413.5.1732744063648&amp;__hsfp=2522753148" target="_blank" rel="noopener noreferrer">Vector</a>
+<a id="adp-request" class="maintenance-link" href="https://my.adp.com/" target="_blank" rel="noopener noreferrer">ADP</a>
 </nav>
 <h2>Mix Counts</h2><div class="grid3" id="mix"></div>
 <h2>Hold Tank</h2><div class="grid2">
@@ -102,6 +109,11 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 </div>
 </section>
 
+<section class="calendar-section" aria-label="Jason Jaggers Google Calendar">
+<div class="calendar-heading"><h2>Google Calendar</h2><a href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener noreferrer">Open Calendar</a></div>
+<iframe title="Jason Jaggers calendar agenda" src="https://calendar.google.com/calendar/embed?mode=AGENDA&amp;showTitle=0&amp;showCalendars=0&amp;showPrint=0&amp;ctz=America%2FChicago&amp;src=jasonjaggers%40gmail.com" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe>
+<p class="calendar-hint">Private calendars may not display inside the app. Tap Open Calendar to view your live schedule securely in Google Calendar.</p>
+</section>
 </main><div role="status" aria-live="polite" id="toast"></div>
 <script>
 (()=>{'use strict';
