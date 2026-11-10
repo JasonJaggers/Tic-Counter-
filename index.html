@@ -153,6 +153,12 @@ footer .action.danger,.level-actions .action.danger{background:rgba(103,42,49,.1
 #toast{z-index:10;max-width:calc(100vw - 36px);white-space:normal;text-align:center;background:#34445e;box-shadow:0 8px 24px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);border-radius:14px}
 @media(max-width:350px){.brand-heading h1{font-size:16px}.calc-row .calc-btn{flex-basis:58px;width:58px}.quick-links .maintenance-link{font-size:12px}.tile .count{font-size:30px}}
 @media(prefers-reduced-motion:reduce){button,.maintenance-link{transition:none}}
+
+/* Keep native swipe scrolling but hide the app's outer scroll indicator. */
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+html{overflow-x:hidden}
+body{overflow-x:hidden;-webkit-overflow-scrolling:touch}
 </style>
 </head>
 <body><main>
