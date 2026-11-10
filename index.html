@@ -52,6 +52,11 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 .level-input{font-size:19px}
 .level-actions{margin-top:9px;gap:8px}
 .level-actions .action{min-height:44px;padding:9px 7px;font-size:12px}
+/* BBS status uses a 6:10 AM America/Chicago workday boundary. */
+#bbs-request.bbs-pending{background:#8a2330;border-color:#d85b64;color:#fff}
+#bbs-request.bbs-done{background:#17673c;border-color:#43b878;color:#fff}
+#bbs-request.bbs-pending:active{background:#aa3240}
+#bbs-request.bbs-done:active{background:#1b814a}
 </style>
 </head>
 <body><main>
@@ -104,8 +109,8 @@ build($('mix'),ids.slice(0,3));build($('trucks'),ids.slice(3));
 $('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
 for(const field of ['pounds','amd']){const input=$(field);input.value=data[field];input.addEventListener('input',()=>{data[field]=input.value;save()});}
 $('share').onclick=async()=>{
-const lines=['STERLING SPECIALTY',new Date().toLocaleString()];
-const addSection=(heading,entries)=>{if(entries.length)lines.push('',heading,...entries)};
+const lines=[];
+const addSection=(_heading,entries)=>{if(entries.length)lines.push(...entries)};
 const nonzeroCount=(name)=>data.counts[name]>0?name+': '+data.counts[name]:null;
 addSection('MIX COUNTS',['Mix 1','Mix 2','Mix 3'].map(nonzeroCount).filter(Boolean));
 const tank=[];
@@ -114,7 +119,7 @@ if(data.pounds!==''&&Number.isFinite(pounds)&&pounds!==0)tank.push('Pounds: '+po
 if(data.amd!==''&&Number.isFinite(amd)&&amd!==0)tank.push('AMD: '+data.amd+'%');
 addSection('HOLD TANK',tank);
 addSection('UNLOAD COUNTS',['AA','NA','AN'].map(nonzeroCount).filter(Boolean));
-if(lines.length===2){notify('Nothing recorded to share');return}
+if(!lines.length){notify('Nothing recorded to share');return}
 const body=lines.join('\n');
 if(navigator.share){try{await navigator.share({text:body});return}catch(e){if(e.name==='AbortError')return;}}
 location.href='sms:&body='+encodeURIComponent(body);
@@ -175,6 +180,33 @@ $('reset-levels').onclick=()=>{
   levelNames.forEach(name=>{levels[name]='0';$('level-'+name).value='0'});
   saveLevels();notify('Levels reset');
 };
+// BBS reminder turns green on opening its form, and red at 6:10 AM Central.
+const BBS_KEY='sterling-specialty-bbs-selected-v1';
+const bbsButton=$('bbs-request');
+const bbsDateFormat=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+const bbsWorkday=()=>{
+  const p=Object.fromEntries(bbsDateFormat.formatToParts(new Date()).filter(x=>x.type!=='literal').map(x=>[x.type,Number(x.value)]));
+  const d=new Date(Date.UTC(p.year,p.month-1,p.day));
+  if(p.hour<6||(p.hour===6&&p.minute<10))d.setUTCDate(d.getUTCDate()-1);
+  return d.toISOString().slice(0,10);
+};
+const paintBbs=()=>{
+  let selected='';
+  try{selected=localStorage.getItem(BBS_KEY)||''}catch(e){console.warn('BBS state unavailable',e)}
+  const done=selected===bbsWorkday();
+  bbsButton.classList.toggle('bbs-done',done);
+  bbsButton.classList.toggle('bbs-pending',!done);
+  bbsButton.setAttribute('aria-label',done?'BBS opened for current workday':'BBS not yet opened for current workday');
+};
+bbsButton.addEventListener('click',()=>{
+  try{localStorage.setItem(BBS_KEY,bbsWorkday())}catch(e){notify('Could not save BBS status')}
+  paintBbs();
+});
+paintBbs();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)paintBbs()});
+window.addEventListener('pageshow',paintBbs);
+window.addEventListener('focus',paintBbs);
+setInterval(paintBbs,15000);
 if('serviceWorker' in navigator && /^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn(e));
 })();
 </script></body></html>
