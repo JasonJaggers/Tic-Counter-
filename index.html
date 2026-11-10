@@ -230,7 +230,7 @@ const nonzeroCount=(name)=>data.counts[name]>0?name+': '+data.counts[name]:null;
 addSection('MIX COUNTS',['Mix 1','Mix 2','Mix 3'].map(nonzeroCount).filter(Boolean));
 const tank=[];
 const pounds=Number(data.pounds),amd=Number(data.amd);
-if(data.pounds!==''&&Number.isFinite(pounds)&&pounds!==0)tank.push('Pounds: '+pounds.toLocaleString('en-US')+' lb');
+if(data.pounds!==''&&Number.isFinite(pounds)&&pounds!==0)tank.push('Hold: '+pounds.toLocaleString('en-US')+' lb');
 if(data.amd!==''&&Number.isFinite(amd)&&amd!==0)tank.push('AMD: '+data.amd+'%');
 addSection('HOLD TANK',tank);
 addSection('UNLOAD COUNTS',['AA','NA','AN'].map(nonzeroCount).filter(Boolean));
