@@ -75,9 +75,11 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 @media(max-width:350px){.calc-row .calc-btn{flex-basis:104px;width:104px}.calc-row .field input{font-size:19px}}
 .calc-row .calc-btn{flex:0 0 66px;width:66px;font-size:28px;font-weight:700}
 @media(max-width:350px){.calc-row .calc-btn{flex-basis:58px;width:58px}}
-.calendar-shortcut-wrap{display:flex;justify-content:flex-start;margin:16px 0 1px}
-#calendar-shortcut{width:44px;height:44px;border:1px solid #344b60;border-radius:12px;background:#172534;color:#b7d7ee;display:flex;align-items:center;justify-content:center;text-decoration:none}
-#calendar-shortcut:active{background:#29465c}
+.calendar-panel{margin-top:18px;padding:10px;background:#111e2b;border:1px solid #344b60;border-radius:15px;box-shadow:0 2px 10px rgba(0,0,0,.16)}
+.calendar-panel iframe{display:block;width:100%;height:290px;border:0;border-radius:9px;background:#101820;color-scheme:dark}
+.calendar-panel-actions{display:flex;justify-content:flex-start;margin-top:9px}
+#calendar-open{min-width:64px;min-height:36px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #47779c;border-radius:9px;background:#244564;color:#d6eeff;text-decoration:none;font-size:12px;font-weight:700}
+#calendar-open:active{background:#35658c}
 </style>
 </head>
 <body><main>
@@ -116,7 +118,10 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 </div>
 </section>
 
-<div class="calendar-shortcut-wrap"><a id="calendar-shortcut" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener noreferrer" aria-label="Open Google Calendar" title="Calendar"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg></a></div>
+<section class="calendar-panel" aria-label="Jason Jaggers calendar">
+<iframe title="Jason Jaggers Google Calendar agenda" src="https://calendar.google.com/calendar/embed?mode=AGENDA&amp;showTitle=0&amp;showCalendars=0&amp;showPrint=0&amp;showTabs=0&amp;showDate=0&amp;ctz=America%2FChicago&amp;src=jasonjaggers%40gmail.com" loading="lazy" referrerpolicy="no-referrer"></iframe>
+<div class="calendar-panel-actions"><a id="calendar-open" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener noreferrer" aria-label="Open Google Calendar">Open</a></div>
+</section>
 </main><div role="status" aria-live="polite" id="toast"></div>
 <script>
 (()=>{'use strict';
