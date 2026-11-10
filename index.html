@@ -78,15 +78,17 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 .calc-row .field input{width:100%;min-width:0;font-size:22px}
 .calc-row .calc-btn{flex:0 0 116px;width:116px;min-height:44px;margin:0;align-self:stretch;font-size:14px}
 @media(max-width:350px){.calc-row .calc-btn{flex-basis:104px;width:104px}.calc-row .field input{font-size:19px}}
+.calc-row .calc-btn{flex:0 0 66px;width:66px;font-size:28px;font-weight:700}
+@media(max-width:350px){.calc-row .calc-btn{flex-basis:58px;width:58px}}
 </style>
 </head>
 <body><main>
 <header class="brand-header"><img class="brand-logo" src="sterling-specialty-icon-full.png" alt="Sterling logo"><div class="brand-heading"><h1>STERLING SPECIALTY</h1><div class="subtitle" id="today"></div></div></header>
-<section class="conversion" aria-label="Pounds to kilograms conversion">
+<section class="conversion" aria-label="Mix conversion lb to kg">
 <h2>Mix Calculation</h2>
 <div class="calc-row">
-<div class="field"><label for="mix-input">Pounds → kilograms</label><input id="mix-input" type="number" inputmode="numeric" step="1" placeholder="Pounds"></div>
-<button type="button" class="action calc-btn" id="calculate">Calculate</button>
+<div class="field"><label for="mix-input">lb → kg</label><input id="mix-input" type="number" inputmode="numeric" step="1" placeholder="0"></div>
+<button type="button" class="action calc-btn" id="calculate" aria-label="Convert pounds to kilograms">=</button>
 </div>
 </section>
 <nav class="quick-links" aria-label="Quick links">
