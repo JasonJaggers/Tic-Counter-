@@ -57,6 +57,12 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 #bbs-request.bbs-done{background:#17673c;border-color:#43b878;color:#fff}
 #bbs-request.bbs-pending:active{background:#aa3240}
 #bbs-request.bbs-done:active{background:#1b814a}
+
+/* Four priority tools in a compact, thumb-friendly 2x2 layout. */
+.quick-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.quick-links .maintenance-link{min-height:46px;font-size:13px}
+#report-request{background:#304c68;border-color:#6d9ab9;color:#fff;font-weight:750}
+#report-request:active{background:#416b90}
 </style>
 </head>
 <body><main>
@@ -67,6 +73,7 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 <button type="button" class="action calc-btn" id="calculate">Calculate</button>
 </section>
 <nav class="quick-links" aria-label="Quick links">
+<a id="report-request" class="maintenance-link" href="https://chatgpt.com/?prompt=I'm%20ready%20to%20give%20my%20Sterling%20Specialty%20Chemicals%20shift%20report.%20Please%20take%20my%20handoff%20and%20operating%20notes%2C%20organize%20them%20into%20a%20concise%20shift%20report%2C%20and%20ask%20only%20for%20essential%20missing%20details.%20Do%20not%20claim%20to%20have%20saved%20or%20updated%20any%20document%20unless%20you%20actually%20have." target="_blank" rel="noopener noreferrer" aria-label="Open ChatGPT shift report chat">✎ Report ↗</a>
 <a id="maintenance-request" class="maintenance-link" href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYjYirSKb_9RJnPVbEZGRGXVUOVlHOFhDN1RGUkJZVFNDSjI5NFM0WjJaNC4u&amp;origin=QRCode&amp;route=shorturl" target="_blank" rel="noopener noreferrer">Maintenance Request ↗</a>
 <a id="bbs-request" class="maintenance-link" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYvc20LGvfjhIt1-2If4mnyNUMVdXTzU4VVg1V0Y2N0JMME1BS1lKQzVZSy4u&amp;origin=QRCode" target="_blank" rel="noopener noreferrer">BBS ↗</a>
 <a id="hazards-request" class="maintenance-link" href="https://app.industrysafe.com/default.asp?__hstc=108400413.b5ab5a05ea64dff45301da1252f9e8e6.1685735468245.1732722102562.1732744063648.841&amp;__hssc=108400413.5.1732744063648&amp;__hsfp=2522753148" target="_blank" rel="noopener noreferrer">Vector ↗</a>
