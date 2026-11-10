@@ -85,6 +85,74 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 .corner-bl{bottom:0;left:0}.corner-bl::after{bottom:3px;left:3px;border-width:0 0 2px 2px;border-radius:0 0 0 4px}
 .corner-br{bottom:0;right:0}.corner-br::after{bottom:3px;right:3px;border-width:0 2px 2px 0;border-radius:0 0 4px 0}
 .calendar-hot-corner:focus-visible{outline:2px solid #73bbff;outline-offset:-3px}
+
+/* iOS-inspired visual system v18 — layout and interaction identifiers preserved */
+:root{
+  color-scheme:dark;
+  --bg:#080b12;--card:#181d29;--card2:#242b39;
+  --accent:#8eb9ff;--text:#f8f9ff;--muted:#a7afc0;--border:rgba(183,202,239,.13);
+  --surface:#111622;--input:#0c121e;--hairline:rgba(255,255,255,.085);
+}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{
+  background:radial-gradient(ellipse 105% 340px at 50% -145px,rgba(55,87,146,.22),transparent 85%),var(--bg);
+  color:var(--text);-webkit-font-smoothing:antialiased;
+  padding:calc(env(safe-area-inset-top) + 11px) 14px calc(env(safe-area-inset-bottom) + 28px);
+}
+main{max-width:540px}
+button,a,input{-webkit-tap-highlight-color:transparent}
+button,.maintenance-link{transition:background-color .16s ease,transform .12s ease,border-color .16s ease}
+button:active,.maintenance-link:active{transform:scale(.975)}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #a8c7ff;outline-offset:2px}
+.brand-header{padding:4px 2px 14px;margin-bottom:12px;border-bottom:1px solid var(--hairline);gap:12px}
+.brand-logo{width:46px;height:46px;border-radius:13px;box-shadow:0 4px 18px rgba(0,0,0,.24)}
+.brand-heading h1{font-size:clamp(17px,5vw,24px);font-weight:800;letter-spacing:-.65px}
+.brand-heading .subtitle{color:#8e9bad;font-size:11px;font-weight:500;letter-spacing:.02em;margin-top:3px}
+h2{color:#aeb8cd;font-size:11px;letter-spacing:.095em;font-weight:760;margin:18px 2px 9px}
+.conversion{margin:0 0 12px;padding:13px;background:linear-gradient(155deg,#1a263c,#151c2b 75%);border:1px solid rgba(144,181,239,.18);border-radius:19px;box-shadow:0 7px 24px rgba(0,0,0,.14)}
+.conversion h2{margin:0 0 10px;font-size:11px;color:#b6c8e5}
+.calc-row{gap:9px}
+.calc-row .field{background:rgba(7,13,24,.5);border:1px solid rgba(164,188,228,.17);padding:8px 11px;border-radius:13px}
+.calc-row .field label{font-size:11px;color:#acb9d0;font-weight:700;margin-bottom:5px}
+.calc-row .field input{background:transparent;border:0;padding:2px 0 4px;min-height:36px;font-size:27px;letter-spacing:-.4px;font-weight:750;font-variant-numeric:tabular-nums;outline:0}
+.calc-row .field:focus-within{border-color:rgba(146,191,255,.65);box-shadow:0 0 0 2px rgba(146,191,255,.1)}
+.calc-row .calc-btn{flex-basis:66px;width:66px;min-height:64px;border-radius:13px!important;border:1px solid rgba(155,201,255,.32)!important;background:linear-gradient(160deg,#42699c,#315179)!important;color:white!important;font-size:30px;box-shadow:inset 0 1px rgba(255,255,255,.13)}
+.quick-links{gap:8px;margin:0 0 16px}
+.quick-links .maintenance-link{min-height:48px;margin:0;padding:10px 8px;border:1px solid rgba(176,196,231,.15);border-radius:14px;background:#1c2534;color:#e9edf7;font-size:13px;font-weight:660;box-shadow:inset 0 1px rgba(255,255,255,.035)}
+#report-request{background:#253853;border-color:#4a6589;color:#f4f7ff}
+.quick-links #adp-request{min-height:44px;background:#202734;border:1px solid rgba(176,196,231,.15);letter-spacing:.045em}
+#bbs-request.bbs-pending,#report-request.report-pending{background:#632731!important;border-color:#a94d59!important;color:#fff!important}
+#bbs-request.bbs-done,#report-request.report-done{background:#1d513d!important;border-color:#397f61!important;color:#e8fff1!important}
+.grid3,.grid2{gap:9px}
+.tile,.field,.level-tile{box-shadow:inset 0 1px rgba(255,255,255,.035)}
+.tile{background:linear-gradient(160deg,#1b2230,#161c28);border:1px solid var(--border);border-radius:17px;padding:11px 8px 9px;gap:9px}
+.tile .name{font-size:12px;letter-spacing:.015em;font-weight:700;color:#abb8cd}
+.tile .count{font-size:34px;font-weight:760;letter-spacing:-1px}
+.plus{min-height:44px;border-radius:12px;background:#2b3c55;border:1px solid rgba(129,168,224,.22);color:#b7d4ff;font-size:25px;box-shadow:inset 0 1px rgba(255,255,255,.07)}
+.plus:active{background:#3b5274}
+.grid2 .field{background:#1b2230;border:1px solid var(--border);border-radius:16px;padding:12px}
+.field label{color:#aab7cb;font-size:12px;margin-bottom:8px}
+.grid2 .field input{background:#0d1420;border:1px solid rgba(170,194,234,.17);border-radius:11px;padding:10px 9px;min-height:44px;font-size:23px}
+.field .suffix{margin-top:5px;color:#8897ae;font-size:11px}
+footer{margin-top:13px;gap:8px}
+footer .action,.level-actions .action{min-height:44px;padding:10px 9px;background:#212b3b;border:1px solid rgba(176,196,231,.14);color:#ebf0fb;border-radius:13px;font-size:12px;font-weight:670}
+footer .action.danger,.level-actions .action.danger{background:rgba(103,42,49,.18);color:#ffadb8;border-color:rgba(193,93,110,.22)}
+.levels-section{margin-top:22px;padding-top:5px;border-top:1px solid var(--hairline)}
+.levels-section h2{margin-top:11px}
+.level-grid{gap:8px}
+.level-tile{background:#1a2130;border:1px solid var(--border);border-radius:14px;padding:10px 6px;gap:8px}
+.level-tile .level-name{font-size:12px;font-weight:750;color:#a8b6ce}
+.level-input-wrap{background:#0d1420;border:1px solid rgba(170,194,234,.17);border-radius:10px;min-height:43px}
+.level-input{font-size:20px;font-weight:720}
+.level-unit{font-size:12px;color:#899bb5}
+.level-share{background:#283a53!important;color:#edf4ff!important;border-color:#49698b!important}
+.calendar-panel{margin-top:19px;padding:9px;background:#111825;border:1px solid rgba(176,196,231,.16);border-radius:18px;box-shadow:0 6px 24px rgba(0,0,0,.16)}
+.calendar-viewport{border-radius:11px;background:#0e1521}
+.calendar-viewport iframe{background:#0e1521}
+.calendar-hot-corner::after{border-color:rgba(161,192,239,.64)}
+#toast{z-index:10;max-width:calc(100vw - 36px);white-space:normal;text-align:center;background:#34445e;box-shadow:0 8px 24px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);border-radius:14px}
+@media(max-width:350px){.brand-heading h1{font-size:16px}.calc-row .calc-btn{flex-basis:58px;width:58px}.quick-links .maintenance-link{font-size:12px}.tile .count{font-size:30px}}
+@media(prefers-reduced-motion:reduce){button,.maintenance-link{transition:none}}
 </style>
 </head>
 <body><main>
