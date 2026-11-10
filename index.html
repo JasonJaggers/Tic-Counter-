@@ -63,6 +63,10 @@ footer .action{flex:1 1 calc(50% - 7px);min-height:44px;padding:9px 8px;font-siz
 .quick-links .maintenance-link{min-height:46px;font-size:13px}
 #report-request{background:#304c68;border-color:#6d9ab9;color:#fff;font-weight:750}
 #report-request:active{background:#416b90}
+#report-request.report-pending{background:#8a2330;border-color:#d85b64;color:#fff}
+#report-request.report-done{background:#17673c;border-color:#43b878;color:#fff}
+#report-request.report-pending:active{background:#aa3240}
+#report-request.report-done:active{background:#1b814a}
 </style>
 </head>
 <body><main>
@@ -214,6 +218,26 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)paintBbs()
 window.addEventListener('pageshow',paintBbs);
 window.addEventListener('focus',paintBbs);
 setInterval(paintBbs,15000);
+// Independent Report reminder shares the 6:10 AM Central workday boundary.
+const REPORT_KEY='sterling-specialty-report-selected-v1';
+const reportButton=$('report-request');
+const paintReport=()=>{
+  let selected='';
+  try{selected=localStorage.getItem(REPORT_KEY)||''}catch(e){console.warn('Report state unavailable',e)}
+  const opened=selected===bbsWorkday();
+  reportButton.classList.toggle('report-done',opened);
+  reportButton.classList.toggle('report-pending',!opened);
+  reportButton.setAttribute('aria-label',opened?'Report chat opened this workday':'Open ChatGPT report chat');
+};
+reportButton.addEventListener('click',()=>{
+  try{localStorage.setItem(REPORT_KEY,bbsWorkday())}catch(e){notify('Could not save Report status')}
+  paintReport();
+});
+paintReport();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)paintReport()});
+window.addEventListener('pageshow',paintReport);
+window.addEventListener('focus',paintReport);
+setInterval(paintReport,15000);
 if('serviceWorker' in navigator && /^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn(e));
 })();
 </script></body></html>
