@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#0b121b">
+<meta name="theme-color" content="#090d16">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="STERLING SPECIALTY">
@@ -226,6 +226,54 @@ footer .action.danger,.level-actions .action.danger{background:rgba(112,49,56,.2
 #toast{background:#224b50;border-color:rgba(137,214,205,.3)}
 @media(max-width:350px){.tile .count{font-size:30px}.plus{min-height:44px}}
 @media(prefers-reduced-motion:reduce){button,.maintenance-link{transition:none}}
+
+
+/* Sterling palette refresh v20: graphite / midnight / cobalt.
+   Visual-only overrides; counters, links, calendar and status logic unchanged. */
+:root{
+  --bg:#090d16;--card:#171f30;--card2:#202c43;
+  --accent:#73aaff;--text:#f5f8ff;--muted:#a9b8d0;
+  --border:rgba(148,175,218,.18);--surface:#111827;
+  --input:#0d1524;--hairline:rgba(165,190,232,.12);
+}
+html{background:var(--bg)}
+body{background:radial-gradient(ellipse 110% 310px at 50% -125px,rgba(55,99,182,.24),transparent 84%),var(--bg);color:var(--text)}
+.brand-header{border-bottom-color:var(--hairline)}
+.brand-heading .subtitle{color:#93a5c0}
+h2{color:#aabbd5}
+.conversion{background:linear-gradient(140deg,#1b2b49,#141d30 73%);border-color:rgba(125,166,239,.25)}
+.conversion h2{color:#c2d6ff}
+.calc-row .field{background:rgba(8,15,30,.66);border-color:rgba(145,174,226,.22)}
+.calc-row .field label{color:#aebfdb}
+.calc-row .field input{color:#f5f8ff}
+.calc-row .field:focus-within{border-color:#75a9ff;box-shadow:0 0 0 2px rgba(100,155,255,.14)}
+.calc-row .calc-btn{background:linear-gradient(155deg,#3769bc,#28539a)!important;border-color:#5c91e6!important;color:#fff!important}
+.quick-links .maintenance-link{background:linear-gradient(155deg,#25334d,#1b273c);border-color:rgba(151,177,224,.22);color:#eef3ff}
+#report-request{background:linear-gradient(150deg,#294d86,#203961);border-color:rgba(121,166,239,.5);color:#fff}
+.quick-links #adp-request{background:#1b273c;border-color:rgba(151,177,224,.2)}
+#bbs-request.bbs-pending,#report-request.report-pending{background:#672b39!important;border-color:#af586f!important;color:#fff!important}
+#bbs-request.bbs-done,#report-request.report-done{background:#235a9f!important;border-color:#5c9cf4!important;color:#f7fbff!important}
+#bbs-request.bbs-done:active,#report-request.report-done:active{background:#2c6bb8!important}
+.tile{background:linear-gradient(160deg,#1c283d,#141d2e);border-color:var(--border)}
+.tile .name{color:#b4c5e1}
+.tile .count{color:#f6f9ff}
+.plus{background:#273f66;border-color:rgba(115,163,239,.38);color:#bed8ff}
+.plus:active{background:#34588b}
+.grid2 .field{background:#1a263a;border-color:var(--border)}
+.field label{color:#b0c2de}
+.grid2 .field input{background:#0d1728;border-color:rgba(145,174,226,.24);color:#f6f9ff}
+.field .suffix{color:#94a8c6}
+footer .action,.level-actions .action{background:#202f49;border-color:rgba(151,177,224,.2);color:#eef3ff}
+.level-tile{background:#1a263a;border-color:var(--border)}
+.level-tile .level-name{color:#b3c4df}
+.level-input-wrap{background:#0d1728;border-color:rgba(145,174,226,.24)}
+.level-input{color:#f6f9ff}
+.level-unit{color:#9bafcc}
+.level-share{background:#294b7d!important;color:#f1f6ff!important;border-color:rgba(111,161,236,.5)!important}
+.calendar-panel{background:#141e30;border-color:rgba(151,177,224,.2)}
+.calendar-viewport,.calendar-viewport iframe{background:#0d1728}
+.calendar-hot-corner::after{border-color:rgba(112,165,255,.7)}
+#toast{background:#263e64;border-color:rgba(121,166,239,.35)}
 
 </style>
 </head>
