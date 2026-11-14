@@ -336,6 +336,12 @@ body{background:radial-gradient(ellipse 90% 260px at 70% -65px,rgba(53,95,190,.2
 .v2-nav button.active{background:#31558E;color:white}
 @media(max-width:380px){#v2-home .quick-links a{font-size:9px}.v2-hero-title{font-size:21px}}
 
+/* Sterling 2.1 consolidated report styling */
+.v21-version{display:inline-block;margin-top:3px;background:#34568D;color:#EDF5FF;border-radius:8px;padding:3px 8px;font-weight:800;font-size:11px}
+.v21-readings{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.v21-report-preview{display:flex;flex-direction:column;gap:5px;margin-top:14px;padding:12px;background:#12243C;border:1px solid #355078;border-radius:12px;font-size:12px}
+.v21-report-preview span{color:#AFC3E0;line-height:1.5}
+.v21-sync{color:#F7BD77;font-size:12px;line-height:1.5;margin:12px 2px 0}
 </style>
 </head>
 <body><main>
@@ -499,33 +505,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)paintBbs()
 window.addEventListener('pageshow',paintBbs);
 window.addEventListener('focus',paintBbs);
 setInterval(paintBbs,15000);
-// Independent Report reminder shares the 6:10 AM Central workday boundary.
-const REPORT_KEY='sterling-specialty-report-selected-v1';
-const reportButton=$('report-request');
-const paintReport=()=>{
-  let selected='';
-  try{selected=localStorage.getItem(REPORT_KEY)||''}catch(e){console.warn('Report state unavailable',e)}
-  const opened=selected===bbsWorkday();
-  reportButton.classList.toggle('report-done',opened);
-  reportButton.classList.toggle('report-pending',!opened);
-  reportButton.setAttribute('aria-label',opened?'Report chat opened this workday':'Open ChatGPT report chat');
-};
-const markReportOpened=()=>{
-  try{localStorage.setItem(REPORT_KEY,bbsWorkday())}catch(e){notify('Could not save Report status')}
-  reportButton.classList.remove('report-pending');
-  reportButton.classList.add('report-done');
-  paintReport();
-};
-// Save at touch/pointer activation before iOS hands control to ChatGPT.
-reportButton.addEventListener('pointerdown',markReportOpened);
-reportButton.addEventListener('touchstart',markReportOpened,{passive:true});
-reportButton.addEventListener('click',markReportOpened);
-reportButton.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')markReportOpened()});
-paintReport();
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)paintReport()});
-window.addEventListener('pageshow',paintReport);
-window.addEventListener('focus',paintReport);
-setInterval(paintReport,15000);
+// Report status is managed in the local 2.1 workspace.
 if('serviceWorker' in navigator && /^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn(e));
 })();
 </script>
@@ -540,10 +520,11 @@ const shift=document.createElement('section');shift.className='v2-panel';shift.i
 const history=document.createElement('section');history.className='v2-panel';history.id='v2-history';history.hidden=true;
 const existing=Array.from(host.children).filter(el=>el!==header);
 existing.forEach(el=>home.appendChild(el));
-const hero=document.createElement('div');hero.className='v2-hero';
-hero.innerHTML='<div class="v2-eyebrow">LINE 1 · OPERATOR DASHBOARD <span class="v2-version">2.0</span></div><div class="v2-hero-row"><div><div class="v2-hero-title">Your shift, organized.</div><div class="v2-hero-sub">Counters, actions and handoff in one place</div></div><div class="v2-hero-icon" aria-hidden="true">▦</div></div><div class="v2-summary"><div><small>MIX TOTAL</small><strong id="v2-mix-total">0</strong></div><div><small>UNLOAD TOTAL</small><strong id="v2-unload-total">0</strong></div><div><small>DAILY TASKS</small><strong id="v2-tasks">0/2</strong></div></div>';
-home.prepend(hero);
+const version=document.createElement('span');version.className='v21-version';version.textContent='2.1';
+const heading=header.querySelector('.brand-heading h1');if(heading)heading.after(version);
 const quick=home.querySelector('.quick-links');const conv=home.querySelector('.conversion');
+const reportLink=document.getElementById('report-request');if(reportLink){reportLink.href='#v21-report';reportLink.setAttribute('aria-label','Open local report workspace');}
+
 if(quick&&conv){conv.after(quick)}
 const legacyHeading=home.querySelector('h2');
 if(legacyHeading)legacyHeading.classList.add('v2-section-title');
@@ -573,43 +554,38 @@ function snapshot(){
 window.sterlingArchive=()=>{
  try{const v=snapshot();archives.unshift(v);archives=archives.slice(0,120);persist(ARCHIVE_KEY,archives);renderArchive()}catch{alert('Unable to archive counters. Cancel reset and export CSV.');throw Error('Backup failed')}
 };
-shift.innerHTML=`<div class="v2-card"><h2>SHIFT WORKSPACE</h2><p class="v2-subtitle">Save handoffs and observations locally. Nothing is sent until you choose to share. Do not use this as a substitute for required plant records.</p><label class="v2-field" for="v2-note">Handoff / operating notes</label><textarea id="v2-note" class="v2-notes" placeholder="Handoff, flow, belt speed, dryer temperatures, initiators, downtime, maintenance..."></textarea><div class="v2-actions"><button class="v2-action" id="v2-save">Save note</button><button class="v2-action secondary" id="v2-report">Prepare report</button></div></div><div class="v2-card"><h2>SAVED NOTES</h2><div id="v2-notes"></div></div>`;
+shift.innerHTML=`<div class="v2-card" id="v21-report"><h2>SHIFT REPORT · 2.1</h2><p class="v2-subtitle">Your readings, counters, levels and notes in one report. Stored on this device until secure spreadsheet syncing is configured.</p><label class="v2-field" for="v21-operator">Operator</label><input class="v2-input" id="v21-operator" placeholder="Name or initials"/><div class="v21-readings"><div><label class="v2-field" for="v21-flow">Flow (gpm)</label><input class="v2-input" id="v21-flow" type="number" inputmode="decimal" min="0" step="any" placeholder="11"/></div><div><label class="v2-field" for="v21-belt">Belt speed</label><input class="v2-input" id="v21-belt" type="number" inputmode="decimal" min="0" step="any" placeholder="30"/></div></div><label class="v2-field" for="v21-dryer">Dryer temperatures</label><input class="v2-input" id="v21-dryer" placeholder="280 / 290 / 305 / 310"/><label class="v2-field" for="v21-initiators">Initiator settings</label><input class="v2-input" id="v21-initiators" placeholder="560 / 560"/><label class="v2-field" for="v2-note">Handoff, operating notes and maintenance</label><textarea class="v2-notes" id="v2-note" placeholder="Handoff and observations..."></textarea><div class="v21-report-preview"><strong>Included automatically</strong><span>Mix 1–3 · AA / NA / AN unload counts · Hold / AMD · all four tank levels</span></div><div class="v2-actions"><button class="v2-action" id="v21-file">Save report locally</button><button class="v2-action secondary" id="v21-export-report">Export latest</button></div><p class="v21-sync" id="v21-sync-status" role="status">Google Sheets not connected — saved reports remain on this device.</p></div><div class="v2-card"><h2>SAVED REPORTS</h2><div id="v21-reports"></div></div>`;
 history.innerHTML=`<div class="v2-card"><h2>RESET HISTORY</h2><p class="v2-subtitle">Counter snapshots are automatically saved before each confirmed reset. Stored only on this device.</p><div class="v2-actions"><button class="v2-action secondary" id="v2-backup">Back up current counts</button><button class="v2-action secondary" id="v2-export">Export history</button></div><div id="v2-archives"></div></div>`;
-function renderNotes(){
- const holder=$('v2-notes');holder.replaceChildren();
- if(!notes.length){holder.textContent='No notes yet.';holder.className='v2-empty';return}
- holder.className='';
- notes.slice(0,40).forEach(n=>{const e=document.createElement('div');e.className='v2-note';const d=document.createElement('small');d.textContent=n.at;const t=document.createElement('div');t.textContent=n.text;e.append(d,t);holder.append(e)})
-}
+function renderNotes(){}
 function renderArchive(){
  const holder=$('v2-archives');holder.replaceChildren();
  if(!archives.length){holder.textContent='No backups yet.';holder.className='v2-empty';return}
  holder.className='';
  archives.slice(0,30).forEach(a=>{const el=document.createElement('div');el.className='v2-note';const d=document.createElement('small');d.textContent=a.created;const t=document.createElement('div');t.textContent='Mix: '+['Mix 1','Mix 2','Mix 3'].map(k=>safe(a.counts?.[k]||0)).join(' / ')+'  •  Unload: '+['AA','NA','AN'].map(k=>safe(a.counts?.[k]||0)).join(' / ')+'  •  Hold: '+safe(a.hold)+' lb';el.append(d,t);holder.append(el)})
 }
-function saveNote(){
- const t=$('v2-note').value.trim();if(!t){alert('Enter a note first.');return false}
- notes.unshift({at:date(),text:t});notes=notes.slice(0,200);
- if(!persist(NOTE_KEY,notes))return false;
- $('v2-note').value='';renderNotes();return true
-}
-$('v2-save').onclick=saveNote;
-$('v2-report').onclick=()=>{
- const typed=$('v2-note').value.trim();
- const recent=notes.slice(0,8).reverse().map(x=>x.at+' — '+x.text).join('\n');
- const message='Prepare a concise Sterling Specialty Chemicals shift report from these operator notes. Ask only essential missing details. Do not claim to have filed the report unless actually saved.\n\n'+[recent,typed].filter(Boolean).join('\n');
- if(!recent&&!typed){alert('Add a note first.');return}
- window.open('https://chatgpt.com/?prompt='+encodeURIComponent(message),'_blank','noopener,noreferrer')
-};
+const REPORTS_KEY='sterling-v21-reports',DRAFT_KEY='sterling-v21-draft';let reports=read(REPORTS_KEY,[]);
+const fields=['operator','flow','belt','dryer','initiators'];
+let draft={};try{draft=JSON.parse(localStorage.getItem(DRAFT_KEY)||'{}')}catch{}
+function saveDraft(){const d={};fields.forEach(k=>d[k]=$('v21-'+k).value);d.notes=$('v2-note').value;try{localStorage.setItem(DRAFT_KEY,JSON.stringify(d))}catch{}}
+fields.forEach(k=>{const el=$('v21-'+k);el.value=draft[k]||'';el.addEventListener('input',saveDraft)});$('v2-note').value=draft.notes||'';$('v2-note').addEventListener('input',saveDraft);
+function renderReports(){const root=$('v21-reports');root.replaceChildren();if(!reports.length){root.textContent='No reports on this device.';root.className='v2-empty';return}root.className='';reports.slice(0,30).forEach(r=>{const e=document.createElement('div');e.className='v2-note';const d=document.createElement('small');d.textContent=r.local_time+' · '+(r.operator||'Unnamed operator')+' · Local only';const t=document.createElement('div');t.textContent='Flow: '+(r.readings.flow_gpm||'—')+' · Belt: '+(r.readings.belt_speed||'—')+' · Dryer: '+(r.readings.dryer_temperatures||'—')+' · Initiators: '+(r.readings.initiators||'—')+'\n'+(r.notes||'');e.append(d,t);root.append(e)})}
+function exportJSON(obj,name){const b=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+$('v21-file').onclick=()=>{const inputs={};fields.forEach(k=>inputs[k]=$('v21-'+k).value.trim());const note=$('v2-note').value.trim();if(!inputs.operator&&!inputs.flow&&!inputs.belt&&!inputs.dryer&&!inputs.initiators&&!note){alert('Enter a reading or note first.');return}
+for(const k of ['flow','belt'])if(inputs[k]!==''&&(!Number.isFinite(Number(inputs[k]))||Number(inputs[k])<0)){alert('Invalid '+k);return}
+let snap;try{snap=snapshot()}catch{alert('Could not read counters; report was not saved.');return}
+const r={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),created_at:new Date().toISOString(),local_time:snap.created,operator:inputs.operator,readings:{flow_gpm:inputs.flow,belt_speed:inputs.belt,dryer_temperatures:inputs.dryer,initiators:inputs.initiators},counters:snap.counts,hold_lb:snap.hold,amd_percent:snap.amd,levels_percent:snap.levels,notes:note,sync_status:'local_only'};
+const items=[r,...reports].slice(0,200);if(!persist(REPORTS_KEY,items))return;reports=items;renderReports();$('v21-sync-status').textContent='Saved locally. Not uploaded to Google Sheets.';alert('Report saved on this device (not synced to Google Sheets).')};
+$('v21-export-report').onclick=()=>{if(!reports.length){alert('Save a report first.');return}exportJSON(reports[0],'sterling-report-'+reports[0].created_at.slice(0,10)+'.json')};
+renderReports();if(reportLink)reportLink.addEventListener('click',e=>{e.preventDefault();select(shift)});
 $('v2-backup').onclick=()=>{try{window.sterlingArchive();alert('Snapshot saved locally.')}catch{}};
 $('v2-export').onclick=()=>{
- const payload=JSON.stringify({exported:date(),archives,notes},null,2);
+ const payload=JSON.stringify({exported:date(),archives,notes,reports},null,2);
  const b=new Blob([payload],{type:'application/json'});const u=URL.createObjectURL(b);
  const a=document.createElement('a');a.href=u;a.download='sterling-shift-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)
 };
 renderNotes();renderArchive();
 const bar=document.createElement('nav');bar.className='v2-nav';bar.setAttribute('aria-label','App navigation');
-const tabs=[['Home',home],['Shift',shift],['History',history]];
+const tabs=[['Home',home],['Report',shift],['History',history]];
 function select(panel){
  tabs.forEach(([name,el])=>{el.hidden=el!==panel;const b=bar.querySelector('[data-v2-tab="'+name+'"]');b.classList.toggle('active',el===panel);b.setAttribute('aria-current',el===panel?'page':'false')});
  window.scrollTo({top:0,behavior:'instant'});
