@@ -342,6 +342,53 @@ body{background:radial-gradient(ellipse 90% 260px at 70% -65px,rgba(53,95,190,.2
 .v21-report-preview{display:flex;flex-direction:column;gap:5px;margin-top:14px;padding:12px;background:#12243C;border:1px solid #355078;border-radius:12px;font-size:12px}
 .v21-report-preview span{color:#AFC3E0;line-height:1.5}
 .v21-sync{color:#F7BD77;font-size:12px;line-height:1.5;margin:12px 2px 0}
+
+/* Sterling 2.1 sharper visual identity, contextual actions */
+:root{--bg:#080D17;--text:#F5F8FF;--accent:#7EAAFF;--border:rgba(139,173,227,.2)}
+html,body{background:#080D17}
+body{background:radial-gradient(ellipse 115% 270px at 44% -126px,rgba(58,103,184,.2),transparent 85%),#080D17}
+.brand-header{gap:10px;padding:5px 0 12px;margin-bottom:10px;border-bottom:1px solid rgba(141,174,229,.14);align-items:center}
+.brand-logo{width:43px;height:43px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.brand-heading{display:block;min-width:0;white-space:nowrap}
+.brand-heading h1{display:inline-block;vertical-align:middle;margin:0;font-size:clamp(15px,4.35vw,21px);letter-spacing:-.65px;font-weight:810;line-height:1.2;color:#F7FAFF}
+.brand-heading .v21-version{display:inline-flex;vertical-align:middle;margin:0 0 0 7px;padding:3px 7px;border:1px solid rgba(116,172,255,.4);background:#27466F;color:#CDE0FF;font-size:10px;font-weight:850;border-radius:7px;letter-spacing:.02em}
+.brand-heading .subtitle{display:block;margin-top:5px;font-size:10px;color:#94A7C3;letter-spacing:.02em}
+#v2-home .conversion{background:linear-gradient(143deg,#1A2C4B,#111F35);border:1px solid #354F7B;border-radius:17px;padding:14px;box-shadow:0 8px 20px rgba(1,5,16,.14)}
+#v2-home .conversion h2{color:#BFD3F4;margin:0 0 8px;font-size:11px;letter-spacing:.1em}
+#v2-home .calc-row .calc-btn{background:linear-gradient(145deg,#528BE8,#3164B7)!important;border:1px solid #6599F0!important;border-radius:12px!important;box-shadow:0 3px 12px rgba(39,91,177,.22)}
+#v2-home .quick-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:3px 0 18px}
+#v2-home .quick-links .maintenance-link{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:8px;min-width:0;min-height:55px;padding:10px 12px;font-size:13px;font-weight:760;line-height:1.1;border-radius:14px;letter-spacing:-.02em;box-shadow:inset 0 1px rgba(255,255,255,.07)}
+#v2-home .quick-links .maintenance-link::before{font-size:19px;line-height:1;flex:none}
+#v2-home .quick-links #report-request{background:linear-gradient(135deg,#354F94,#27396F)!important;border-color:#6281CC!important;color:#EFF4FF!important}
+#v2-home .quick-links #report-request::before{content:"✎";font-size:24px}
+#v2-home .quick-links #maintenance-request{background:linear-gradient(135deg,#493521,#322719)!important;border-color:#A97A40!important;color:#FFE1B6!important}
+#v2-home .quick-links #maintenance-request::before{content:"⚒"}
+#v2-home .quick-links #bbs-request{background:linear-gradient(135deg,#47391E,#322B1D)!important;border-color:#AE8950!important;color:#FFE7A8!important}
+#v2-home .quick-links #bbs-request::before{content:"✓";font-size:22px}
+#v2-home .quick-links #bbs-request.bbs-done{background:linear-gradient(135deg,#1D5A48,#173D36)!important;border-color:#409F81!important;color:#E0FFF4!important}
+#v2-home .quick-links #hazards-request{background:linear-gradient(135deg,#562D37,#3E2530)!important;border-color:#B3667B!important;color:#FFE0E8!important}
+#v2-home .quick-links #hazards-request::before{content:"⚠";font-size:20px}
+#v2-home .quick-links #adp-request{grid-column:1/-1;min-height:42px;background:#1A273B!important;border:1px solid #344960!important;color:#B9CCEA!important;letter-spacing:.025em}
+#v2-home .quick-links #adp-request::before{content:"▣";font-size:19px}
+#v2-home h2{color:#C2D2EA;font-size:11px;letter-spacing:.1em}
+#v2-home .tile{border:1px solid #314866;background:linear-gradient(150deg,#1A2B43,#141E32);border-radius:15px;box-shadow:inset 0 1px rgba(255,255,255,.04)}
+#v2-home .tile .count{font-size:35px;letter-spacing:-1.1px}
+#v2-home #mix .plus{background:#294C83;border:1px solid #487AC0;color:#EAF4FF}
+#v2-home #trucks .plus{background:#49376F;border:1px solid #7458A6;color:#F0E7FF}
+#v2-home #trucks .tile{background:linear-gradient(150deg,#24233E,#191D33);border-color:#48406A}
+#v2-home .level-tile{background:#142C36;border-color:#315767}
+#v2-home .level-input-wrap{background:#0B222B;border-color:#315C68}
+#v2-home .level-input{color:#D2FFF5}
+#v2-home .level-share{background:#1D625F!important;border:1px solid #398C88!important;color:#D7FFFA!important}
+#v2-home footer .action.danger,#v2-home .level-actions .action.danger{color:#FFC4C6;border-color:#8B4E5B;background:#3C2631}
+.v2-card{background:#15243A;border:1px solid #314663;box-shadow:0 4px 17px rgba(0,0,0,.12)}
+.v2-action{background:#315B98;border-color:#5F8DCC}
+.v2-action.secondary{background:#273954;border-color:#456284;color:#E5F0FF}
+.v2-nav{background:rgba(9,15,26,.97);border-top:1px solid #364A69;box-shadow:0 -7px 24px rgba(0,0,0,.16)}
+.v2-nav button{font-weight:760;color:#AFC1DF;letter-spacing:.02em}
+.v2-nav button.active{background:#355B94;border-color:#547FC2;color:white}
+@media(max-width:360px){.brand-heading h1{font-size:15px}.brand-heading .v21-version{font-size:9px;margin-left:5px}#v2-home .quick-links .maintenance-link{font-size:12px;padding:9px 8px}}
+@media(prefers-reduced-motion:no-preference){#v2-home .plus:active,#v2-home .maintenance-link:active{transform:scale(.96)}}
 </style>
 </head>
 <body><main>
@@ -521,24 +568,21 @@ const history=document.createElement('section');history.className='v2-panel';his
 const existing=Array.from(host.children).filter(el=>el!==header);
 existing.forEach(el=>home.appendChild(el));
 const version=document.createElement('span');version.className='v21-version';version.textContent='2.1';
-const heading=header.querySelector('.brand-heading h1');if(heading)heading.after(version);
+const heading=header.querySelector('.brand-heading h1');if(heading){heading.after(version);heading.setAttribute('aria-label','Sterling Specialty app version 2.1');}
 const quick=home.querySelector('.quick-links');const conv=home.querySelector('.conversion');
 const reportLink=document.getElementById('report-request');if(reportLink){reportLink.href='#v21-report';reportLink.setAttribute('aria-label','Open local report workspace');}
 
 if(quick&&conv){conv.after(quick)}
+const quickLabels={
+'report-request':'Report',
+'maintenance-request':'Maintenance',
+'bbs-request':'BBS',
+'hazards-request':'Vector',
+'adp-request':'ADP'
+};
+Object.entries(quickLabels).forEach(([id,label])=>{const el=document.getElementById(id);if(el)el.textContent=label;});
 const legacyHeading=home.querySelector('h2');
 if(legacyHeading)legacyHeading.classList.add('v2-section-title');
-const updateSummary=()=>{
- try{const d=JSON.parse(localStorage.getItem('tank-counter-v1')||'{}').counts||{};
- const total=names=>names.reduce((n,k)=>n+(Number(d[k])||0),0);
- document.getElementById('v2-mix-total').textContent=String(total(['Mix 1','Mix 2','Mix 3']));
- document.getElementById('v2-unload-total').textContent=String(total(['AA','NA','AN']));
- const tasks=Number(document.getElementById('bbs-request')?.classList.contains('bbs-done'))+Number(document.getElementById('report-request')?.classList.contains('report-done'));
- document.getElementById('v2-tasks').textContent=tasks+'/2';
- }catch{}};
-home.addEventListener('click',()=>setTimeout(updateSummary,0));
-window.addEventListener('focus',updateSummary);document.addEventListener('visibilitychange',updateSummary);
-setInterval(updateSummary,15000);updateSummary();
 host.append(home,shift,history);
 const NOTE_KEY='sterling-v2-shift-notes',ARCHIVE_KEY='sterling-v2-archives';
 const read=(key,defaultValue)=>{try{const val=JSON.parse(localStorage.getItem(key));return Array.isArray(val)?val:defaultValue}catch{return defaultValue}};
