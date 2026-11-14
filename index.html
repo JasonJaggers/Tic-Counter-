@@ -301,6 +301,41 @@ body{padding-bottom:calc(env(safe-area-inset-bottom) + 92px)}
 .v2-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .v2-pill{border:1px solid #3c5377;background:#1d304d;border-radius:11px;padding:9px;color:#d7e5ff;font-size:12px}
 
+/* Sterling 2.0 visual redesign */
+:root{--bg:#080D18;--surface:#111B2E;--accent:#80ACFF}
+body{background:radial-gradient(ellipse 90% 260px at 70% -65px,rgba(53,95,190,.25),transparent),#080D18}
+.brand-header{border:0;padding:3px 1px 5px;margin-bottom:4px}
+.brand-logo{width:42px;height:42px;border-radius:12px}
+.brand-heading h1{font-size:19px;letter-spacing:.02em}
+.brand-heading .subtitle{font-size:11px}
+.v2-hero{margin:8px 0 16px;padding:17px 16px;background:linear-gradient(135deg,#233A66,#172743 65%,#152239);border:1px solid #385586;border-radius:21px;box-shadow:0 12px 28px rgba(0,0,0,.2)}
+.v2-eyebrow{font-size:10px;color:#B6D1FF;font-weight:800;letter-spacing:.12em}
+.v2-version{float:right;background:#35568C;padding:3px 8px;border-radius:20px;color:#E9F1FF;font-size:10px;letter-spacing:0}
+.v2-hero-row{display:flex;justify-content:space-between;align-items:center;margin:12px 0 18px;gap:10px}
+.v2-hero-title{font-size:23px;font-weight:800;letter-spacing:-.8px;color:#fff}
+.v2-hero-sub{font-size:12px;margin-top:5px;color:#B7C9E7}
+.v2-hero-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#355487;color:#DCE9FF;font-size:26px;flex:none}
+.v2-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.v2-summary>div{padding:10px 7px;background:rgba(8,20,42,.48);border:1px solid rgba(165,192,235,.16);border-radius:12px;min-width:0;text-align:center}
+.v2-summary small{display:block;color:#9DB5DC;font-size:9px;letter-spacing:.04em;font-weight:700}
+.v2-summary strong{display:block;color:white;font-size:21px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
+#v2-home .conversion{background:linear-gradient(135deg,#182B4B,#121F34);border:1px solid #344C76;margin-bottom:12px;border-radius:18px}
+#v2-home .conversion h2{color:#B7CDFF}
+#v2-home .calc-row .calc-btn{background:#376FC3!important;border-color:#568CE3!important}
+#v2-home .quick-links{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0 0 16px}
+#v2-home .quick-links a{font-size:10px;min-width:0;min-height:58px;padding:9px 4px;overflow-wrap:anywhere;background:#192841;border:1px solid #334B70;line-height:1.2}
+#v2-home .quick-links #adp-request{grid-column:span 4;min-height:36px;letter-spacing:.1em;background:#121E32}
+#v2-home #report-request{background:#294F8C;color:white}
+#v2-home h2{margin:17px 2px 9px;font-size:11px;color:#AFC2E0}
+#v2-home .tile{background:#17243A;border:1px solid #2E4161;border-radius:16px;padding:11px 7px}
+#v2-home .tile .count{font-size:33px}
+#v2-home .plus{background:#2C4D80;border-color:#476DA6;min-height:48px;color:#E4EFFF}
+#v2-home .level-tile{background:#18263E}
+#v2-home .calendar-panel{background:#111E31}
+.v2-nav{background:rgba(9,15,27,.97);border-top:1px solid #354968}
+.v2-nav button.active{background:#31558E;color:white}
+@media(max-width:380px){#v2-home .quick-links a{font-size:9px}.v2-hero-title{font-size:21px}}
+
 </style>
 </head>
 <body><main>
@@ -505,6 +540,24 @@ const shift=document.createElement('section');shift.className='v2-panel';shift.i
 const history=document.createElement('section');history.className='v2-panel';history.id='v2-history';history.hidden=true;
 const existing=Array.from(host.children).filter(el=>el!==header);
 existing.forEach(el=>home.appendChild(el));
+const hero=document.createElement('div');hero.className='v2-hero';
+hero.innerHTML='<div class="v2-eyebrow">LINE 1 · OPERATOR DASHBOARD <span class="v2-version">2.0</span></div><div class="v2-hero-row"><div><div class="v2-hero-title">Your shift, organized.</div><div class="v2-hero-sub">Counters, actions and handoff in one place</div></div><div class="v2-hero-icon" aria-hidden="true">▦</div></div><div class="v2-summary"><div><small>MIX TOTAL</small><strong id="v2-mix-total">0</strong></div><div><small>UNLOAD TOTAL</small><strong id="v2-unload-total">0</strong></div><div><small>DAILY TASKS</small><strong id="v2-tasks">0/2</strong></div></div>';
+home.prepend(hero);
+const quick=home.querySelector('.quick-links');const conv=home.querySelector('.conversion');
+if(quick&&conv){conv.after(quick)}
+const legacyHeading=home.querySelector('h2');
+if(legacyHeading)legacyHeading.classList.add('v2-section-title');
+const updateSummary=()=>{
+ try{const d=JSON.parse(localStorage.getItem('tank-counter-v1')||'{}').counts||{};
+ const total=names=>names.reduce((n,k)=>n+(Number(d[k])||0),0);
+ document.getElementById('v2-mix-total').textContent=String(total(['Mix 1','Mix 2','Mix 3']));
+ document.getElementById('v2-unload-total').textContent=String(total(['AA','NA','AN']));
+ const tasks=Number(document.getElementById('bbs-request')?.classList.contains('bbs-done'))+Number(document.getElementById('report-request')?.classList.contains('report-done'));
+ document.getElementById('v2-tasks').textContent=tasks+'/2';
+ }catch{}};
+home.addEventListener('click',()=>setTimeout(updateSummary,0));
+window.addEventListener('focus',updateSummary);document.addEventListener('visibilitychange',updateSummary);
+setInterval(updateSummary,15000);updateSummary();
 host.append(home,shift,history);
 const NOTE_KEY='sterling-v2-shift-notes',ARCHIVE_KEY='sterling-v2-archives';
 const read=(key,defaultValue)=>{try{const val=JSON.parse(localStorage.getItem(key));return Array.isArray(val)?val:defaultValue}catch{return defaultValue}};
