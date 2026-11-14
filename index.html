@@ -275,6 +275,32 @@ footer .action,.level-actions .action{background:#202f49;border-color:rgba(151,1
 .calendar-hot-corner::after{border-color:rgba(112,165,255,.7)}
 #toast{background:#263e64;border-color:rgba(121,166,239,.35)}
 
+
+/* Sterling 2.0: operator-focused sections and bottom navigation */
+body{padding-bottom:calc(env(safe-area-inset-bottom) + 92px)}
+.brand-header{position:relative}
+.brand-heading .subtitle{font-variant-numeric:tabular-nums}
+.v2-nav{position:fixed;z-index:30;bottom:0;left:0;right:0;padding:9px 12px calc(env(safe-area-inset-bottom) + 9px);background:rgba(10,16,29,.96);border-top:1px solid #34415b;display:flex;gap:8px;justify-content:center;backdrop-filter:blur(16px)}
+.v2-nav button{flex:1;max-width:135px;border:1px solid transparent;background:transparent;color:#a7b9d5;padding:9px 4px;border-radius:13px;font:700 12px -apple-system,BlinkMacSystemFont,sans-serif;min-height:44px}
+.v2-nav button.active{background:#273e65;border-color:#45699c;color:#f1f6ff}
+.v2-panel[hidden]{display:none!important}
+.v2-panel{animation:v2in .12s ease-out}@keyframes v2in{from{opacity:.7}to{opacity:1}}
+.v2-card{background:#17243a;border:1px solid rgba(151,177,224,.21);padding:14px;border-radius:17px;margin:12px 0}
+.v2-card h2{margin:0 0 10px;font-size:12px}
+.v2-field{display:block;color:#c2d0e8;font-size:12px;font-weight:650;margin:11px 0 6px}
+.v2-input,.v2-notes{display:block;width:100%;background:#0e192d;border:1px solid #3a4b6c;border-radius:12px;padding:12px;color:#f2f7ff;font:inherit;font-size:16px;outline:0;min-height:45px}
+.v2-notes{min-height:145px;resize:vertical;line-height:1.4}
+.v2-input:focus,.v2-notes:focus{border-color:#78a8f9}
+.v2-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.v2-action{border:1px solid #5276ae;background:#2b4d80;border-radius:12px;padding:12px 8px;color:#fff;font-weight:700;font-size:13px;min-height:46px}
+.v2-action.secondary{background:#25334a;border-color:#3b4c69}
+.v2-note{border-top:1px solid #34425a;padding:12px 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.5}
+.v2-note small{display:block;color:#a6b6d0;font-size:11px;margin-bottom:5px}
+.v2-empty{font-size:13px;color:#9badc8}
+.v2-subtitle{font-size:12px;color:#a8bad8;line-height:1.5}
+.v2-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.v2-pill{border:1px solid #3c5377;background:#1d304d;border-radius:11px;padding:9px;color:#d7e5ff;font-size:12px}
+
 </style>
 </head>
 <body><main>
@@ -356,9 +382,9 @@ if(navigator.share){try{await navigator.share({text:body});return}catch(e){if(e.
 location.href='sms:&body='+encodeURIComponent(body);
 };
 $('undo').onclick=()=>{const prev=history.pop();if(!prev){notify('No recent tap to undo');return}data.counts[prev.name]=prev.value;$('n-'+prev.name.replace(' ','-')).textContent=prev.value;save();notify('Undid '+prev.name)};
-$('reset').onclick=()=>{if(!confirm('Reset all Mix counts, unload counts, tank pounds, and AMD to zero?'))return;ids.forEach(id=>{data.counts[id]=0;$('n-'+id.replace(' ','-')).textContent='0'});data.pounds='0';data.amd='0';$('pounds').value='0';$('amd').value='0';history=[];save();notify('All values reset')};
+$('reset').onclick=()=>{if(!confirm('Reset all Mix counts, unload counts, tank pounds, and AMD to zero?'))return;window.sterlingArchive?.();ids.forEach(id=>{data.counts[id]=0;$('n-'+id.replace(' ','-')).textContent='0'});data.pounds='0';data.amd='0';$('pounds').value='0';$('amd').value='0';history=[];save();notify('All values reset')};
 $('export').onclick=()=>{const date=new Date().toISOString();const rows=[['Timestamp','Mix 1','Mix 2','Mix 3','Pounds','AMD %','AA','NA','AN'],[date,...ids.slice(0,3).map(k=>data.counts[k]),data.pounds,data.amd,...ids.slice(3).map(k=>data.counts[k])]];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='tank-counter-'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);notify('CSV exported')};
-$('calculate').onclick=()=>{const input=$('mix-input');const raw=input.value.trim();if(raw===''){notify('Enter pounds first');input.focus();return}const pounds=Number(raw);if(!Number.isFinite(pounds)||pounds<0){notify('Enter a valid pounds value');return}input.value=String(Math.round(pounds/2.2046226218487757));input.blur()};
+$('calculate').onclick=()=>{const input=$('mix-input');const raw=input.value.trim();if(raw===''){notify('Enter pounds first');input.focus();return}const pounds=Number(raw);if(!Number.isFinite(pounds)||pounds<0){notify('Enter a valid pounds value');return}input.value=String(Math.ceil(pounds/2.205));input.blur()};
 $('mix-input').addEventListener('keydown',event=>{if(event.key==='Enter'){$('calculate').click();$('mix-input').blur()}});
 // Levels are independent editable percentages (0–99).
 const LEVEL_KEY='sterling-line1-levels-v1';
@@ -466,5 +492,76 @@ window.addEventListener('pageshow',paintReport);
 window.addEventListener('focus',paintReport);
 setInterval(paintReport,15000);
 if('serviceWorker' in navigator && /^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn(e));
+})();
+</script>
+<script>
+/* Sterling 2.0: shift notebook, reset backups and local history. No system control. */
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const host=document.querySelector('main');if(!host)return;
+const header=host.querySelector('.brand-header');
+const home=document.createElement('section');home.className='v2-panel';home.id='v2-home';
+const shift=document.createElement('section');shift.className='v2-panel';shift.id='v2-shift';shift.hidden=true;
+const history=document.createElement('section');history.className='v2-panel';history.id='v2-history';history.hidden=true;
+const existing=Array.from(host.children).filter(el=>el!==header);
+existing.forEach(el=>home.appendChild(el));
+host.append(home,shift,history);
+const NOTE_KEY='sterling-v2-shift-notes',ARCHIVE_KEY='sterling-v2-archives';
+const read=(key,defaultValue)=>{try{const val=JSON.parse(localStorage.getItem(key));return Array.isArray(val)?val:defaultValue}catch{return defaultValue}};
+const persist=(key,val)=>{try{localStorage.setItem(key,JSON.stringify(val));return true}catch{alert('Storage unavailable. Please export your records.');return false}};
+let notes=read(NOTE_KEY,[]),archives=read(ARCHIVE_KEY,[]);
+const safe=(val)=>String(val==null?'':val);
+const date=()=>new Date().toLocaleString('en-US',{timeZone:'America/Chicago',dateStyle:'medium',timeStyle:'short'});
+function snapshot(){
+ const old=JSON.parse(localStorage.getItem('tank-counter-v1')||'{}');
+ const lev=JSON.parse(localStorage.getItem('sterling-line1-levels-v1')||'{}');
+ return {created:date(),counts:old.counts||{},hold:old.pounds||'',amd:old.amd||'',levels:lev};
+}
+window.sterlingArchive=()=>{
+ try{const v=snapshot();archives.unshift(v);archives=archives.slice(0,120);persist(ARCHIVE_KEY,archives);renderArchive()}catch{alert('Unable to archive counters. Cancel reset and export CSV.');throw Error('Backup failed')}
+};
+shift.innerHTML=`<div class="v2-card"><h2>SHIFT WORKSPACE</h2><p class="v2-subtitle">Save handoffs and observations locally. Nothing is sent until you choose to share. Do not use this as a substitute for required plant records.</p><label class="v2-field" for="v2-note">Handoff / operating notes</label><textarea id="v2-note" class="v2-notes" placeholder="Handoff, flow, belt speed, dryer temperatures, initiators, downtime, maintenance..."></textarea><div class="v2-actions"><button class="v2-action" id="v2-save">Save note</button><button class="v2-action secondary" id="v2-report">Prepare report</button></div></div><div class="v2-card"><h2>SAVED NOTES</h2><div id="v2-notes"></div></div>`;
+history.innerHTML=`<div class="v2-card"><h2>RESET HISTORY</h2><p class="v2-subtitle">Counter snapshots are automatically saved before each confirmed reset. Stored only on this device.</p><div class="v2-actions"><button class="v2-action secondary" id="v2-backup">Back up current counts</button><button class="v2-action secondary" id="v2-export">Export history</button></div><div id="v2-archives"></div></div>`;
+function renderNotes(){
+ const holder=$('v2-notes');holder.replaceChildren();
+ if(!notes.length){holder.textContent='No notes yet.';holder.className='v2-empty';return}
+ holder.className='';
+ notes.slice(0,40).forEach(n=>{const e=document.createElement('div');e.className='v2-note';const d=document.createElement('small');d.textContent=n.at;const t=document.createElement('div');t.textContent=n.text;e.append(d,t);holder.append(e)})
+}
+function renderArchive(){
+ const holder=$('v2-archives');holder.replaceChildren();
+ if(!archives.length){holder.textContent='No backups yet.';holder.className='v2-empty';return}
+ holder.className='';
+ archives.slice(0,30).forEach(a=>{const el=document.createElement('div');el.className='v2-note';const d=document.createElement('small');d.textContent=a.created;const t=document.createElement('div');t.textContent='Mix: '+['Mix 1','Mix 2','Mix 3'].map(k=>safe(a.counts?.[k]||0)).join(' / ')+'  •  Unload: '+['AA','NA','AN'].map(k=>safe(a.counts?.[k]||0)).join(' / ')+'  •  Hold: '+safe(a.hold)+' lb';el.append(d,t);holder.append(el)})
+}
+function saveNote(){
+ const t=$('v2-note').value.trim();if(!t){alert('Enter a note first.');return false}
+ notes.unshift({at:date(),text:t});notes=notes.slice(0,200);
+ if(!persist(NOTE_KEY,notes))return false;
+ $('v2-note').value='';renderNotes();return true
+}
+$('v2-save').onclick=saveNote;
+$('v2-report').onclick=()=>{
+ const typed=$('v2-note').value.trim();
+ const recent=notes.slice(0,8).reverse().map(x=>x.at+' — '+x.text).join('\n');
+ const message='Prepare a concise Sterling Specialty Chemicals shift report from these operator notes. Ask only essential missing details. Do not claim to have filed the report unless actually saved.\n\n'+[recent,typed].filter(Boolean).join('\n');
+ if(!recent&&!typed){alert('Add a note first.');return}
+ window.open('https://chatgpt.com/?prompt='+encodeURIComponent(message),'_blank','noopener,noreferrer')
+};
+$('v2-backup').onclick=()=>{try{window.sterlingArchive();alert('Snapshot saved locally.')}catch{}};
+$('v2-export').onclick=()=>{
+ const payload=JSON.stringify({exported:date(),archives,notes},null,2);
+ const b=new Blob([payload],{type:'application/json'});const u=URL.createObjectURL(b);
+ const a=document.createElement('a');a.href=u;a.download='sterling-shift-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)
+};
+renderNotes();renderArchive();
+const bar=document.createElement('nav');bar.className='v2-nav';bar.setAttribute('aria-label','App navigation');
+const tabs=[['Home',home],['Shift',shift],['History',history]];
+function select(panel){
+ tabs.forEach(([name,el])=>{el.hidden=el!==panel;const b=bar.querySelector('[data-v2-tab="'+name+'"]');b.classList.toggle('active',el===panel);b.setAttribute('aria-current',el===panel?'page':'false')});
+ window.scrollTo({top:0,behavior:'instant'});
+}
+tabs.forEach(([name,panel])=>{const b=document.createElement('button');b.type='button';b.textContent=name;b.dataset.v2Tab=name;b.onclick=()=>select(panel);bar.append(b)});
+document.body.append(bar);select(home);
 })();
 </script></body></html>
