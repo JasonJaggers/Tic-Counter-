@@ -554,7 +554,7 @@ function snapshot(){
 window.sterlingArchive=()=>{
  try{const v=snapshot();archives.unshift(v);archives=archives.slice(0,120);persist(ARCHIVE_KEY,archives);renderArchive()}catch{alert('Unable to archive counters. Cancel reset and export CSV.');throw Error('Backup failed')}
 };
-shift.innerHTML=`<div class="v2-card" id="v21-report"><h2>SHIFT REPORT · 2.1</h2><p class="v2-subtitle">Your readings, counters, levels and notes in one report. Stored on this device until secure spreadsheet syncing is configured.</p><label class="v2-field" for="v21-operator">Operator</label><input class="v2-input" id="v21-operator" placeholder="Name or initials"/><div class="v21-readings"><div><label class="v2-field" for="v21-flow">Flow (gpm)</label><input class="v2-input" id="v21-flow" type="number" inputmode="decimal" min="0" step="any" placeholder="11"/></div><div><label class="v2-field" for="v21-belt">Belt speed</label><input class="v2-input" id="v21-belt" type="number" inputmode="decimal" min="0" step="any" placeholder="30"/></div></div><label class="v2-field" for="v21-dryer">Dryer temperatures</label><input class="v2-input" id="v21-dryer" placeholder="280 / 290 / 305 / 310"/><label class="v2-field" for="v21-initiators">Initiator settings</label><input class="v2-input" id="v21-initiators" placeholder="560 / 560"/><label class="v2-field" for="v2-note">Handoff, operating notes and maintenance</label><textarea class="v2-notes" id="v2-note" placeholder="Handoff and observations..."></textarea><div class="v21-report-preview"><strong>Included automatically</strong><span>Mix 1–3 · AA / NA / AN unload counts · Hold / AMD · all four tank levels</span></div><div class="v2-actions"><button class="v2-action" id="v21-file">Save report locally</button><button class="v2-action secondary" id="v21-export-report">Export latest</button></div><p class="v21-sync" id="v21-sync-status" role="status">Google Sheets not connected — saved reports remain on this device.</p></div><div class="v2-card"><h2>SAVED REPORTS</h2><div id="v21-reports"></div></div>`;
+shift.innerHTML=`<div class="v2-card" id="v21-report"><h2>SHIFT REPORT · 2.1</h2><p class="v2-subtitle">Your readings, counters, levels and notes in one report. Stored on this device until secure spreadsheet syncing is configured.</p><label class="v2-field" for="v21-operator">Operator</label><input class="v2-input" id="v21-operator" placeholder="Name or initials"/><div class="v21-readings"><div><label class="v2-field" for="v21-flow">Flow (gpm)</label><input class="v2-input" id="v21-flow" type="number" inputmode="decimal" min="0" step="any" placeholder="11"/></div><div><label class="v2-field" for="v21-belt">Belt speed</label><input class="v2-input" id="v21-belt" type="number" inputmode="decimal" min="0" step="any" placeholder="30"/></div></div><label class="v2-field" for="v21-dryer">Dryer temperatures</label><input class="v2-input" id="v21-dryer" placeholder="280 / 290 / 305 / 310"/><label class="v2-field" for="v21-initiators">Initiator settings</label><input class="v2-input" id="v21-initiators" placeholder="560 / 560"/><label class="v2-field" for="v2-note">Handoff, operating notes and maintenance</label><textarea class="v2-notes" id="v2-note" placeholder="Handoff and observations..."></textarea><div class="v21-report-preview"><strong>Included automatically</strong><span>Mix 1–3 · AA / NA / AN unload counts · Hold / AMD · all four tank levels</span></div><div class="v2-actions"><button class="v2-action" id="v21-file">Save report locally</button><button class="v2-action secondary" id="v21-export-report">Export latest</button></div><div class="v2-actions"><button class="v2-action secondary" id="v21-connect" type="button">Connect Google</button><button class="v2-action secondary" id="v21-sync" type="button">Sync saved reports</button></div><p class="v21-sync" id="v21-sync-status" role="status">Google Sheets not connected — saved reports remain on this device.</p></div><div class="v2-card"><h2>SAVED REPORTS</h2><div id="v21-reports"></div></div>`;
 history.innerHTML=`<div class="v2-card"><h2>RESET HISTORY</h2><p class="v2-subtitle">Counter snapshots are automatically saved before each confirmed reset. Stored only on this device.</p><div class="v2-actions"><button class="v2-action secondary" id="v2-backup">Back up current counts</button><button class="v2-action secondary" id="v2-export">Export history</button></div><div id="v2-archives"></div></div>`;
 function renderNotes(){}
 function renderArchive(){
@@ -564,6 +564,8 @@ function renderArchive(){
  archives.slice(0,30).forEach(a=>{const el=document.createElement('div');el.className='v2-note';const d=document.createElement('small');d.textContent=a.created;const t=document.createElement('div');t.textContent='Mix: '+['Mix 1','Mix 2','Mix 3'].map(k=>safe(a.counts?.[k]||0)).join(' / ')+'  •  Unload: '+['AA','NA','AN'].map(k=>safe(a.counts?.[k]||0)).join(' / ')+'  •  Hold: '+safe(a.hold)+' lb';el.append(d,t);holder.append(el)})
 }
 const REPORTS_KEY='sterling-v21-reports',DRAFT_KEY='sterling-v21-draft';let reports=read(REPORTS_KEY,[]);
+window.sterling21Reports=()=>reports.slice();
+window.sterling21SetReports=items=>{if(persist(REPORTS_KEY,items)){reports=items;renderReports();return true}return false};
 const fields=['operator','flow','belt','dryer','initiators'];
 let draft={};try{draft=JSON.parse(localStorage.getItem(DRAFT_KEY)||'{}')}catch{}
 function saveDraft(){const d={};fields.forEach(k=>d[k]=$('v21-'+k).value);d.notes=$('v2-note').value;try{localStorage.setItem(DRAFT_KEY,JSON.stringify(d))}catch{}}
@@ -574,7 +576,7 @@ $('v21-file').onclick=()=>{const inputs={};fields.forEach(k=>inputs[k]=$('v21-'+
 for(const k of ['flow','belt'])if(inputs[k]!==''&&(!Number.isFinite(Number(inputs[k]))||Number(inputs[k])<0)){alert('Invalid '+k);return}
 let snap;try{snap=snapshot()}catch{alert('Could not read counters; report was not saved.');return}
 const r={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),created_at:new Date().toISOString(),local_time:snap.created,operator:inputs.operator,readings:{flow_gpm:inputs.flow,belt_speed:inputs.belt,dryer_temperatures:inputs.dryer,initiators:inputs.initiators},counters:snap.counts,hold_lb:snap.hold,amd_percent:snap.amd,levels_percent:snap.levels,notes:note,sync_status:'local_only'};
-const items=[r,...reports].slice(0,200);if(!persist(REPORTS_KEY,items))return;reports=items;renderReports();$('v21-sync-status').textContent='Saved locally. Not uploaded to Google Sheets.';alert('Report saved on this device (not synced to Google Sheets).')};
+const items=[r,...reports].slice(0,200);if(!persist(REPORTS_KEY,items))return;reports=items;renderReports();window.dispatchEvent(new CustomEvent('sterling21-report-saved',{detail:{id:r.id}}));$('v21-sync-status').textContent='Saved locally. Not yet synced to Google Sheets.';alert('Report saved on this device (not synced to Google Sheets).')};
 $('v21-export-report').onclick=()=>{if(!reports.length){alert('Save a report first.');return}exportJSON(reports[0],'sterling-report-'+reports[0].created_at.slice(0,10)+'.json')};
 renderReports();if(reportLink)reportLink.addEventListener('click',e=>{e.preventDefault();select(shift)});
 $('v2-backup').onclick=()=>{try{window.sterlingArchive();alert('Snapshot saved locally.')}catch{}};
@@ -592,5 +594,65 @@ function select(panel){
 }
 tabs.forEach(([name,panel])=>{const b=document.createElement('button');b.type='button';b.textContent=name;b.dataset.v2Tab=name;b.onclick=()=>select(panel);bar.append(b)});
 document.body.append(bar);select(home);
+})();
+</script><script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+/* Sterling 2.1 optional Google Sheets direct-user OAuth connector.
+   Requires a PUBLIC OAuth 2.0 web client ID and an authorized JS origin.
+   Google permissions are enforced per operator; no API secrets live in the PWA. */
+(()=>{
+'use strict';
+const CLIENT_ID=''; // Configure Google Cloud OAuth Web Client ID; public identifier, never a client secret.
+const SHEET_ID='1HXEiHzmICemn7aVLVQQ6ubGKCImIoTr6DdImbgklfps';
+const TAB='App Reports 2.1';
+const SCOPE='https://www.googleapis.com/auth/spreadsheets';
+let token=null,tokenExpiry=0;
+const $=id=>document.getElementById(id);
+const status=message=>{const e=$('v21-sync-status');if(e)e.textContent=message};
+async function getToken(){
+ if(token&&Date.now()<tokenExpiry)return token;
+ if(!CLIENT_ID)throw Error('Google Sheets connection not configured yet.');
+ if(!window.google?.accounts?.oauth2)throw Error('Google sign-in unavailable. Check your connection.');
+ return new Promise((resolve,reject)=>{
+ const client=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPE,callback:r=>{
+ if(r.error||!r.access_token){reject(new Error(r.error||'Google authorization declined'));return}
+ token=r.access_token;tokenExpiry=Date.now()+Math.max(60,Number(r.expires_in||3600)-90)*1000;resolve(token)
+ }});
+ client.requestAccessToken({prompt:'consent'});
+ });
+}
+const cells=r=>[r.id,r.created_at,r.local_time,r.operator,r.readings?.flow_gpm,r.readings?.belt_speed,r.readings?.dryer_temperatures,r.readings?.initiators,r.counters?.['Mix 1'],r.counters?.['Mix 2'],r.counters?.['Mix 3'],r.counters?.AA,r.counters?.NA,r.counters?.AN,r.hold_lb,r.amd_percent,r.levels_percent?.AMD,r.levels_percent?.AA,r.levels_percent?.NA,r.levels_percent?.AN,r.notes,'Sterling PWA 2.1','Filed'].map(x=>x??'');
+async function callGoogle(path,options={}){
+ const key=await getToken();const r=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+encodeURIComponent(SHEET_ID)+path,{...options,headers:{Authorization:'Bearer '+key,...(options.body?{'Content-Type':'application/json'}:{})}});
+ if(!r.ok){if(r.status===401){token=null;tokenExpiry=0}throw Error('Google Sheets returned '+r.status+(r.status===403?' — check spreadsheet access':'')+'.')}
+ return r.json();
+}
+async function sync(){
+ const records=window.sterling21Reports?.()||[];
+ const pending=records.filter(r=>r.sync_status!=='synced');
+ if(!pending.length){status('All locally saved reports are marked synced.');return}
+ if(!CLIENT_ID){status('Google Sheets needs its OAuth Client ID configured. Reports remain safely stored locally.');return}
+ status('Connecting to Google Sheets...');
+ try{
+ const existing=await callGoogle('/values/'+encodeURIComponent("'"+TAB+"'!A2:A10000"));
+ const ids=new Set((existing.values||[]).map(x=>String(x[0]||'')));
+ let count=0;
+ for(const report of pending.slice().reverse()){
+   if(!ids.has(report.id)){
+     await callGoogle('/values/'+encodeURIComponent("'"+TAB+"'!A:W")+':append?valueInputOption=RAW&insertDataOption=INSERT_ROWS',{method:'POST',body:JSON.stringify({majorDimension:'ROWS',values:[cells(report)]})});
+     ids.add(report.id);
+   }
+   report.sync_status='synced';report.synced_at=new Date().toISOString();count++;
+   if(!window.sterling21SetReports(records)){status('Spreadsheet updated, but local sync confirmation could not be saved.');return}
+ }
+ status(count+' report(s) confirmed in Google Sheets.');
+ }catch(e){status(e.message+' Reports remain saved locally for retry.')}
+}
+window.addEventListener('load',()=>{
+ const connect=$('v21-connect'),button=$('v21-sync');if(!connect||!button)return;
+ if(!CLIENT_ID){connect.disabled=true;connect.textContent='Google setup required';status('Local reports ready. Google Sheets authentication is not configured yet.');}
+ else connect.onclick=()=>getToken().then(()=>status('Google connected. Tap Sync saved reports.')).catch(e=>status(e.message));
+ button.onclick=sync;
+});
 })();
 </script></body></html>
