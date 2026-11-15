@@ -139,14 +139,14 @@ $('backup-import').onchange=async event=>{const file=event.target.files[0];if(!f
 };
 $('copy-widget-script').onclick=async()=>{
  const button=$('copy-widget-script');button.disabled=true;
- try{const response=await fetch('./ios/Sterling-Mix.js?v=3.1.0');if(!response.ok)throw Error('Could not load the widget script. Reconnect and retry.');const source=await response.text();if(source.length>32000||!source.includes('Sterling Mix'))throw Error('Widget script unavailable.');
+ try{const response=await fetch('./ios/Sterling-Counters.js?v=3.2.0');if(!response.ok)throw Error('Could not load the widget script. Reconnect and retry.');const source=await response.text();if(source.length>32000||!source.includes('Sterling Mix'))throw Error('Widget script unavailable.');
   $('widget-script-text').value=source;$('widget-script-fallback').hidden=false;
   try{await navigator.clipboard.writeText(source);$('widget-status').textContent='Script copied. In Scriptable, create a script, paste it, and name it Sterling Mix.';notify('Widget script copied.');}
   catch{$('widget-script-fallback').open=true;$('widget-script-text').focus();$('widget-script-text').select();$('widget-status').textContent='Select and copy the script below, then paste it into a new Scriptable script named Sterling Mix.';}
  }catch(e){$('widget-status').textContent=e.message;}finally{button.disabled=false;}
 };
 for(const link of document.querySelectorAll('[data-widget-update]'))link.addEventListener('click',event=>{
- try{link.href=S.widgetURL(data.counts);$('widget-status').textContent='Opening Scriptable with the current mix counts. Check its preview; the Home Screen widget refreshes on the iOS schedule.';}
+ try{link.href=S.widgetURLAll(data.counts);$('widget-status').textContent='Opening Scriptable with the current mix counts. Check its preview; the Home Screen widget refreshes on the iOS schedule.';}
  catch{event.preventDefault();notify('Could not prepare the mix snapshot.');}
 });
 if(location.hash==='#widget-setup'){$('widget-setup').open=true;requestAnimationFrame(()=>$('widget-setup').scrollIntoView({block:'start'}));}
@@ -167,6 +167,24 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(controlled)$('update-app').hidden=false;});
  window.addEventListener('online',()=>registration?.update().catch(()=>{}));
 }
+// Widget actions are applied only inside the browser storage that opened this URL.
+// Repeated URLs are ignored using a short event ledger held alongside the counts.
+function applyWidgetAction(){
+ const url=new URL(location.href),name=url.searchParams.get('widget_counter'),id=url.searchParams.get('widget_event');
+ if(!name&&!id)return;
+ url.searchParams.delete('widget_counter');url.searchParams.delete('widget_event');
+ try{history.replaceState(null,'',url.pathname+url.search+url.hash);}catch{}
+ if(!S.COUNT_NAMES.includes(name)||!id||!/^[a-z0-9-]{8,72}$/i.test(id)){notify('Invalid widget action. No counts changed.');return;}
+ const original=read(K.counts,{}),events=Array.isArray(original.widgetEvents)?original.widgetEvents.filter(x=>typeof x==='string').slice(-40):[];
+ if(events.includes(id)){notify('Widget tap already recorded.');return;}
+ const next=data.counts[name]+1;
+ if(!Number.isSafeInteger(next)){notify('Counter limit reached.');return;}
+ const before=data.counts[name];data.counts[name]=next;
+ if(!persist(K.counts,{...data,widgetEvents:[...events,id].slice(-40)})){data.counts[name]=before;return;}
+ undo.push({name,value:before});if(undo.length>30)undo.shift();
+ notify(name+' recorded · '+next);
+}
+applyWidgetAction();
 renderCounters();refreshSnapshot();renderHistory();paintDaily();connectivity();
 if(storageBlocked)notify('Device storage is unavailable. Export a backup before resetting.');
 })();
