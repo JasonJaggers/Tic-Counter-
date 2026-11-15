@@ -48,6 +48,13 @@ function widgetURL(counts,now=new Date()){
  return 'scriptable:///run?scriptName=Sterling%20Mix&snapshot='+encodeURIComponent(JSON.stringify(widgetSnapshot(counts,now)));
 }
 
+function widgetSnapshotAll(counts,now=new Date()){
+ const all={};for(const key of COUNT_NAMES){const n=counts?.[key];if(!Number.isSafeInteger(n)||n<0)throw Error('Invalid counter');all[key]=n;}
+ return {schema:2,updated_at:now.toISOString(),workday:workday(now),counts:all};
+}
+function widgetURLAll(counts,now=new Date()){
+ return 'scriptable:///run?scriptName=Sterling%20Mix&snapshot='+encodeURIComponent(JSON.stringify(widgetSnapshotAll(counts,now)));
+}
 function csvCell(v){let s=String(v??'');if(/^[=+@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
-return {SHEET_ID,SHEET_URL,COUNT_NAMES,LEVEL_NAMES,centralParts,workday,shift,normalizeCounts,normalizeLevels,buildPrompt,fingerprint,widgetSnapshot,widgetURL,csvCell};
+return {SHEET_ID,SHEET_URL,COUNT_NAMES,LEVEL_NAMES,centralParts,workday,shift,normalizeCounts,normalizeLevels,buildPrompt,fingerprint,widgetSnapshot,widgetURL,widgetSnapshotAll,widgetURLAll,csvCell};
 });
