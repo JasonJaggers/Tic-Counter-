@@ -1,11 +1,11 @@
 {
-  "name": "STERLING SPECIALTY",
-  "short_name": "STERLING SPECIALTY",
+  "name": "Sterling Specialty",
+  "short_name": "Sterling",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#090d16",
-  "theme_color": "#090d16",
+  "background_color": "#0c121c",
+  "theme_color": "#0c121c",
   "icons": [
     {
       "src": "sterling-specialty-icon-full.png",
