@@ -87,3 +87,11 @@ Pages build and the deployed HTML/asset revision. Revert the PR to roll back cod
 local records remain in the preserved keys. Never clear device storage as an
 update procedure. The workstation's automatic documentation merger is a separate
 repository/tool and is not the Sterling app deployment path.
+
+## iPhone mix widget
+
+Open **iOS mix widget** on Home. Install [Scriptable](https://apps.apple.com/us/app/scriptable/id1405459188), copy the widget script into a new Scriptable script named exactly **Sterling Mix**, then add a small or medium Scriptable Home Screen widget and select that script. Return to the Sterling app you normally use and tap **Update widget** to share Mix 1–3.
+
+This is a manual, one-way snapshot, stored locally in Scriptable. Browser storage cannot be read by the widget. Updates show their timestamp; older snapshots are highlighted and missing counts display dashes. Tapping the widget opens its Scriptable preview. iOS controls Home Screen refresh timing, so sending a snapshot does not guarantee an immediate refresh. No account, server, API key or spreadsheet access is required.
+
+The script and transfer validation are tested on Debian with mocked Scriptable APIs; installation and native widget rendering require checking on an iPhone. [Scriptable URL scheme](https://docs.scriptable.app/urlscheme/) · [Widget refresh documentation](https://docs.scriptable.app/listwidget/).

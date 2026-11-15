@@ -40,6 +40,14 @@ function buildPrompt(report){
  ].join('\n\n');
 }
 function fingerprint(value){return JSON.stringify({workday:value.workday,shift:value.shift,counters:value.counters,hold_lb:value.hold_lb,amd_percent:value.amd_percent,levels_percent:value.levels_percent,notes:value.notes,reference_settings:value.reference_settings});}
+function widgetSnapshot(counts,now=new Date()){
+ const mixes={};for(const key of COUNT_NAMES.slice(0,3)){const n=counts?.[key];if(!Number.isSafeInteger(n)||n<0)throw Error('Invalid mix count');mixes[key]=n;}
+ return {schema:1,updated_at:now.toISOString(),workday:workday(now),mixes};
+}
+function widgetURL(counts,now=new Date()){
+ return 'scriptable:///run?scriptName=Sterling%20Mix&snapshot='+encodeURIComponent(JSON.stringify(widgetSnapshot(counts,now)));
+}
+
 function csvCell(v){let s=String(v??'');if(/^[=+@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
-return {SHEET_ID,SHEET_URL,COUNT_NAMES,LEVEL_NAMES,centralParts,workday,shift,normalizeCounts,normalizeLevels,buildPrompt,fingerprint,csvCell};
+return {SHEET_ID,SHEET_URL,COUNT_NAMES,LEVEL_NAMES,centralParts,workday,shift,normalizeCounts,normalizeLevels,buildPrompt,fingerprint,widgetSnapshot,widgetURL,csvCell};
 });

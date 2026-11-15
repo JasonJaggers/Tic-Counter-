@@ -17,11 +17,12 @@ const localDate=()=>new Date().toLocaleString('en-US',{timeZone:'America/Chicago
 function snapshot(){return {created:localDate(),counts:{...data.counts},hold:data.pounds,amd:data.amd,levels:{...levels}};}
 function exportJSON(value,name){download(JSON.stringify(value,null,2),'application/json',name);}
 function download(body,type,name){const blob=new Blob([body],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
+function paintWidgetPreview(){const holder=$('widget-preview-counts');holder.replaceChildren();for(const name of S.COUNT_NAMES.slice(0,3)){const part=document.createElement('div'),label=document.createElement('small'),value=document.createElement('b');label.textContent=name;value.textContent=data.counts[name];part.append(label,value);holder.append(part);}}
 function totals(){
  $('mix-total').textContent=S.COUNT_NAMES.slice(0,3).reduce((n,k)=>n+data.counts[k],0)+' total';
  $('unload-total').textContent=S.COUNT_NAMES.slice(3).reduce((n,k)=>n+data.counts[k],0)+' total';
 }
-function renderCounters(){for(const name of S.COUNT_NAMES)$('n-'+name.replace(' ','-')).textContent=data.counts[name];totals();}
+function renderCounters(){for(const name of S.COUNT_NAMES)$('n-'+name.replace(' ','-')).textContent=data.counts[name];totals();paintWidgetPreview();}
 for(const [parent,names] of [[$('mix'),S.COUNT_NAMES.slice(0,3)],[$('trucks'),S.COUNT_NAMES.slice(3)]]){
  for(const name of names){const card=document.createElement('article');card.className='counter';
  const label=document.createElement('span');label.className='counter-label';label.textContent=name;
@@ -136,6 +137,19 @@ $('backup-import').onchange=async event=>{const file=event.target.files[0];if(!f
  clearTimeout(draftTimer);restoring=true;location.reload();
  }catch(e){notify(e.message||'Could not restore this backup.');}finally{event.target.value='';}
 };
+$('copy-widget-script').onclick=async()=>{
+ const button=$('copy-widget-script');button.disabled=true;
+ try{const response=await fetch('./ios/Sterling-Mix.js?v=3.1.0');if(!response.ok)throw Error('Could not load the widget script. Reconnect and retry.');const source=await response.text();if(source.length>32000||!source.includes('Sterling Mix'))throw Error('Widget script unavailable.');
+  $('widget-script-text').value=source;$('widget-script-fallback').hidden=false;
+  try{await navigator.clipboard.writeText(source);$('widget-status').textContent='Script copied. In Scriptable, create a script, paste it, and name it Sterling Mix.';notify('Widget script copied.');}
+  catch{$('widget-script-fallback').open=true;$('widget-script-text').focus();$('widget-script-text').select();$('widget-status').textContent='Select and copy the script below, then paste it into a new Scriptable script named Sterling Mix.';}
+ }catch(e){$('widget-status').textContent=e.message;}finally{button.disabled=false;}
+};
+for(const link of document.querySelectorAll('[data-widget-update]'))link.addEventListener('click',event=>{
+ try{link.href=S.widgetURL(data.counts);$('widget-status').textContent='Opening Scriptable with the current mix counts. Check its preview; the Home Screen widget refreshes on the iOS schedule.';}
+ catch{event.preventDefault();notify('Could not prepare the mix snapshot.');}
+});
+if(location.hash==='#widget-setup'){$('widget-setup').open=true;requestAnimationFrame(()=>$('widget-setup').scrollIntoView({block:'start'}));}
 $('calendar-details').addEventListener('toggle',()=>{if(!$('calendar-details').open||$('calendar-holder').childElementCount||!navigator.onLine)return;
  const iframe=document.createElement('iframe');iframe.title='Google Calendar agenda';iframe.loading='lazy';iframe.referrerPolicy='no-referrer';iframe.src='https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showCalendars=0&showPrint=0&showTabs=0&ctz=America%2FChicago&src=jasonjaggers%40gmail.com';$('calendar-holder').append(iframe);
 });
