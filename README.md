@@ -88,10 +88,30 @@ local records remain in the preserved keys. Never clear device storage as an
 update procedure. The workstation's automatic documentation merger is a separate
 repository/tool and is not the Sterling app deployment path.
 
-## iPhone mix widget
+## iPhone six-counter Scriptable widget
 
-Open **iOS mix widget** on Home. Install [Scriptable](https://apps.apple.com/us/app/scriptable/id1405459188), copy the widget script into a new Scriptable script named exactly **Sterling Mix**, then add a small or medium Scriptable Home Screen widget and select that script. Return to the Sterling app you normally use and tap **Update widget** to share Mix 1–3.
+Sterling 3.2 includes a new **Sterling Mix** Scriptable script at
+`ios/Sterling-Counters.js`. The large widget displays Mix 1–3 and AA/NA/AN
+unloads. Tap a counter tile to invoke Scriptable and open Sterling with a
+unique increment action. The web app applies each action only once per event ID,
+persists the count to the normal counter key, and removes action arguments from
+the browser URL. The app's **Update widget** action sends all six counts back
+to Scriptable. This is an action-link widget, not an in-place iOS App Intents
+widget.
 
-This is a manual, one-way snapshot, stored locally in Scriptable. Browser storage cannot be read by the widget. Updates show their timestamp; older snapshots are highlighted and missing counts display dashes. Tapping the widget opens its Scriptable preview. iOS controls Home Screen refresh timing, so sending a snapshot does not guarantee an immediate refresh. No account, server, API key or spreadsheet access is required.
+**iOS limitation:** Installed Home Screen web apps and Safari can have separate
+local storage. If a widget tap opens the URL in Safari instead of the existing
+installed Sterling PWA, it updates Safari's counters, **not** the PWA's.
+Therefore real two-way consistency cannot be guaranteed without adding shared
+server-side storage or a native iOS widget extension. Confirm on the device
+that the intended Sterling installation opens and the count changes there.
+Widget displays are snapshots; Scriptable cannot read the PWA's localStorage,
+and iOS refresh scheduling is not immediate. This limitation must not be
+represented as a fully synchronized live widget.
 
-The script and transfer validation are tested on Debian with mocked Scriptable APIs; installation and native widget rendering require checking on an iPhone. [Scriptable URL scheme](https://docs.scriptable.app/urlscheme/) · [Widget refresh documentation](https://docs.scriptable.app/listwidget/).
+For installation, in Sterling select **iOS counter widget → Copy widget
+script**. Paste into Scriptable with the exact name **Sterling Mix**, replacing
+the old read-only script. Add a **large** Scriptable Home Screen widget and
+select this script. In Sterling select **Update widget** to seed all six
+numbers. JavaScript syntax and snapshot validation were checked; native
+iPhone widget navigation and installed-PWA routing have not been verified.
