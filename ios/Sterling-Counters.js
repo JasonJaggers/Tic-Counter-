@@ -75,6 +75,6 @@ const foot=w.addText(state.known?'Tap ＋ to record · opens Sterling':'Open Ste
 foot.font=Font.mediumSystemFont(9);foot.textColor=new Color('899db8');
 w.refreshAfterDate=new Date(Date.now()+10*60000);
 Script.setWidget(w);
-if(!config.runsInWidget)await w.presentLarge();
+if(!config.runsInWidget){const a=new Alert();a.title='Sterling Mix ready';a.message='Widget saved. View it on your Home Screen; Scriptable preview is disabled to avoid the iOS data: page error.';a.addAction('OK');await a.presentAlert();}
 Script.complete();
 })().catch(async e=>{if(!config.runsInWidget){const a=new Alert();a.title='Sterling Widget';a.message=String(e.message||e);a.addAction('OK');await a.presentAlert();}Script.complete();});
