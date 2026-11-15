@@ -65,7 +65,7 @@ for(let section=0;section<2;section++){
   const count=value.addText(state.known?String(state.counts[n]):'—');count.font=Font.boldMonospacedSystemFont(21);count.textColor=new Color('f5f7fb');
   value.addSpacer();
   const plus=value.addText('＋');plus.font=Font.boldSystemFont(20);plus.textColor=new Color('70e2c1');
-  cell.url='scriptable:///run?scriptName=Sterling%20Mix&inc='+encodeURIComponent(n);
+  cell.url='https://open.scriptable.app/run/Sterling%20Mix?inc='+encodeURIComponent(n);
   if(n!==N[section*3+2])row.addSpacer(3);
  }
  if(section===0)w.addSpacer(9);
