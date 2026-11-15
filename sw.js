@@ -1,5 +1,5 @@
 'use strict';
-const REVISION='3.0.0',CACHE='sterling-specialty-cache-v30';
+const REVISION='3.0.1',CACHE='sterling-specialty-cache-v31';
 const FILES=['./','./index.html','./app.css?v='+REVISION,'./report.js?v='+REVISION,'./app.js?v='+REVISION,'./manifest.webmanifest','./sterling-specialty-icon-full.png'];
 const STATIC=new Set(['app.css','report.js','app.js','manifest.webmanifest','sterling-specialty-icon-full.png']);
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting()));});
