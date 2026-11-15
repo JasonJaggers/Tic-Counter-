@@ -19,6 +19,13 @@ if(!localStorage.getItem('qa-seeded')){localStorage.setItem('qa-seeded','1');loc
 `});
 await send('Page.navigate',{url:origin});await until("document.querySelectorAll('#mix .plus').length===3 && window.Sterling");
 ok(await evaluate("document.getElementById('n-Mix-1').textContent==='4' && document.getElementById('level-NA').value==='0'"),'legacy counts/levels preserved');
+await evaluate("document.getElementById('widget-setup').open=true;document.getElementById('copy-widget-script').click();true");
+await until("!!window.__copied");ok(await evaluate("window.__copied.includes('FileManager.local()')"),'widget script copies from app');
+await evaluate("document.getElementById('update-widget').addEventListener('click',e=>e.preventDefault());document.getElementById('update-widget').click();true");
+ok(await evaluate("JSON.parse(new URL(document.getElementById('update-widget').href).searchParams.get('snapshot')).mixes['Mix 1']===4"),'widget link transfers current mix counts');
+await send('Emulation.setDeviceMetricsOverride',{width:375,height:812,deviceScaleFactor:1,mobile:true});await screenshot('widget-375');
+ok(await evaluate('document.documentElement.scrollWidth<=innerWidth'),'widget setup fits phone width');
+await evaluate("document.getElementById('widget-setup').open=false;true");
 await evaluate("document.querySelector('#mix .plus').click();true");ok(await evaluate("document.getElementById('n-Mix-1').textContent==='5' && JSON.parse(localStorage.getItem('tank-counter-v1')).counts['Mix 1']===5"),'counter increment persisted');
 await evaluate("document.getElementById('undo').click();true");ok(await evaluate("document.getElementById('n-Mix-1').textContent==='4'"),'undo preserved');
 await evaluate("document.getElementById('mix-input').value='2205';document.getElementById('calculate').click();true");ok(await evaluate("document.getElementById('conversion-result').textContent==='1,000 kg' && document.getElementById('mix-input').value==='2205'"),'conversion does not convert its result twice');
