@@ -1,6 +1,6 @@
 'use strict';
-const REVISION='3.2.0',CACHE='sterling-specialty-cache-v33';
-const FILES=['./','./index.html','./app.css?v='+REVISION,'./report.js?v='+REVISION,'./app.js?v='+REVISION,'./ios/Sterling-Counters.js?v='+REVISION,'./manifest.webmanifest','./sterling-specialty-icon-full.png'];
+const REVISION='3.2.1',CACHE='sterling-specialty-cache-v34';
+const FILES=['./','./index.html','./app.css?v='+REVISION,'./report.js?v='+REVISION,'./app.js?v='+REVISION,'./manifest.webmanifest','./sterling-specialty-icon-full.png'];
 const STATIC=new Set(['app.css','report.js','app.js','ios/Sterling-Counters.js','manifest.webmanifest','sterling-specialty-icon-full.png']);
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('sterling-specialty-cache-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
