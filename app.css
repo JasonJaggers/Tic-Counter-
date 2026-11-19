@@ -49,7 +49,10 @@ body{padding-top:calc(env(safe-area-inset-top) + 8px)}
 .trend-line{stroke:var(--blue);stroke-width:2}
 #trend-plot .trend-dot{fill:var(--blue);stroke:none}
 .trend-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
-.trend-actions a{display:inline-flex;align-items:center;font-size:13px}
-#trend-status,#trend-import-message{font-size:13px;line-height:1.45;color:var(--muted);margin:8px 0}
-#trend-import-message{color:var(--danger)}
-#trend-import-message:empty{display:none}
+#trend-connection summary{color:var(--muted);font-size:13px;cursor:pointer;padding-top:12px}
+#trend-connection-form{display:grid;gap:8px;font-size:13px}
+#trend-client-id{border:1px solid var(--line);border-radius:8px;padding:10px;font-size:16px}
+#trend-connection-form button{justify-self:start}
+#trend-status,#trend-load-message{font-size:13px;line-height:1.45;color:var(--muted);margin:8px 0}
+#trend-load-message{color:var(--danger)}
+#trend-load-message:empty{display:none}
