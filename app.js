@@ -22,7 +22,7 @@ function totals(){
  $('mix-total').textContent=S.COUNT_NAMES.slice(0,3).reduce((n,k)=>n+data.counts[k],0)+' total';
  $('unload-total').textContent=S.COUNT_NAMES.slice(3).reduce((n,k)=>n+data.counts[k],0)+' total';
 }
-function renderCounters(){for(const name of S.COUNT_NAMES)$('n-'+name.replace(' ','-')).textContent=data.counts[name];totals();paintWidgetPreview();}
+function renderCounters(){for(const name of S.COUNT_NAMES)$('n-'+name.replace(' ','-')).textContent=data.counts[name];totals();}
 for(const [parent,names] of [[$('mix'),S.COUNT_NAMES.slice(0,3)],[$('trucks'),S.COUNT_NAMES.slice(3)]]){
  for(const name of names){const card=document.createElement('article');card.className='counter';
  const label=document.createElement('span');label.className='counter-label';label.textContent=name;
@@ -33,26 +33,29 @@ for(const [parent,names] of [[$('mix'),S.COUNT_NAMES.slice(0,3)],[$('trucks'),S.
  undo.push({name,value:previous});if(undo.length>30)undo.shift();renderCounters();};
  card.append(label,count,button);parent.append(card);}
 }
-for(const key of ['pounds','amd']){const input=$(key);input.value=data[key];input.oninput=()=>{if(!input.validity.valid)return;const previous=data[key];data[key]=input.value;if(!persist(K.counts,data)){data[key]=previous;input.value=previous;}};input.onchange=()=>{if(!input.validity.valid){notify('Check the '+(key==='amd'?'AMD percentage (0–100).':'tank weight (zero or greater).'));input.focus();}};}
+for(const key of ['pounds','amd']){const input=$(key);input.value=Number(data[key])===0?"":data[key];input.oninput=()=>{if(!input.validity.valid)return;const previous=data[key];data[key]=input.value;if(!persist(K.counts,data)){data[key]=previous;input.value=previous;}};input.onchange=()=>{if(!input.validity.valid){notify('Check the '+(key==='amd'?'AMD percentage (0–100).':'tank weight (zero or greater).'));input.focus();}};}
 for(const name of S.LEVEL_NAMES){const card=document.createElement('div');card.className='level';
  const label=document.createElement('label');label.htmlFor='level-'+name;label.textContent=name;
  const wrap=document.createElement('div');wrap.className='input-unit';const input=document.createElement('input');
- Object.assign(input,{id:'level-'+name,type:'number',inputMode:'decimal',min:'0',max:'99',step:'any',placeholder:'0',value:levels[name]});input.setAttribute('aria-label',name+' level percentage');
+ Object.assign(input,{id:'level-'+name,type:'number',inputMode:'decimal',min:'0',max:'99',step:'any',placeholder:' ',value:Number(levels[name])===0?'':levels[name]});input.setAttribute('aria-label',name+' level percentage');
  const unit=document.createElement('span');unit.textContent='%';
  input.oninput=()=>{if(!input.validity.valid)return;const previous=levels[name];levels[name]=input.value;if(!persist(K.levels,levels)){levels[name]=previous;input.value=previous;}};
  input.onchange=()=>{if(!input.validity.valid){notify('Tank levels must be from 0 to 99%.');input.focus();}};
  wrap.append(input,unit);card.append(label,wrap);$('level-counters').append(card);
 }
-$('undo').onclick=()=>{const item=undo[undo.length-1];if(!item){notify('No recent tap to undo.');return;}const current=data.counts[item.name];data.counts[item.name]=item.value;if(!persist(K.counts,data)){data.counts[item.name]=current;return;}undo.pop();renderCounters();notify('Undid '+item.name+'.');};
+function undoCategory(names){const index=undo.findLastIndex(item=>names.includes(item.name));const item=undo[index];if(!item){notify('No recent tap to undo.');return;}const current=data.counts[item.name];data.counts[item.name]=item.value;if(!persist(K.counts,data)){data.counts[item.name]=current;return;}undo.splice(index,1);renderCounters();notify('Undid '+item.name+'.');}
+$('undo-mix').onclick=()=>undoCategory(S.COUNT_NAMES.slice(0,3));
+$('undo-unload').onclick=()=>undoCategory(S.COUNT_NAMES.slice(3));
 function archive(){const next=[snapshot(),...archives].slice(0,120);if(!persist(K.archives,next))return false;archives=next;renderHistory();return true;}
 $('reset').onclick=()=>{if(!confirm('Reset mix/unload counts, hold pounds and AMD? A snapshot will be saved first.'))return;if(!archive())return;
  const previous=data;data=S.normalizeCounts({pounds:'0',amd:'0'});if(!persist(K.counts,data)){data=previous;return;}
- undo=[];renderCounters();$('pounds').value='0';$('amd').value='0';notify('Counts reset. Previous values are in History.');};
+ undo=[];renderCounters();$('pounds').value='';$('amd').value='';notify('Counts reset. Previous snapshot saved on device.');};
 $('reset-levels').onclick=()=>{if(!confirm('Reset all tank levels to zero? A snapshot will be saved first.'))return;if(!archive())return;const previous=levels;
- levels=Object.fromEntries(S.LEVEL_NAMES.map(k=>[k,'0']));if(!persist(K.levels,levels)){levels=previous;return;}for(const k of S.LEVEL_NAMES)$('level-'+k).value='0';notify('Levels reset. Previous values are in History.');};
+ levels=Object.fromEntries(S.LEVEL_NAMES.map(k=>[k,'0']));if(!persist(K.levels,levels)){levels=previous;return;}for(const k of S.LEVEL_NAMES)$('level-'+k).value='';notify('Levels reset. Previous snapshot saved on device.');};
 function validReadings(){for(const id of ['pounds','amd',...S.LEVEL_NAMES.map(n=>'level-'+n)]){if(!$(id).validity.valid){notify('Check the highlighted reading before preparing a report.');$(id).reportValidity();$(id).focus();return false;}}return true;}
 async function share(text){if(navigator.share){try{await navigator.share({text});return;}catch(e){if(e.name==='AbortError')return;}}location.href='sms:&body='+encodeURIComponent(text);}
 $('share').onclick=()=>{if(!validReadings())return;const lines=S.COUNT_NAMES.filter(n=>data.counts[n]>0).map(n=>n+': '+data.counts[n]);if(data.pounds!==''&&Number(data.pounds)!==0)lines.push('Hold: '+Number(data.pounds).toLocaleString('en-US')+' lb');if(data.amd!==''&&Number(data.amd)!==0)lines.push('AMD: '+data.amd+'%');if(!lines.length){notify('Nothing recorded to share.');return;}share(lines.join('\n'));};
+$('share-unloads').onclick=()=>{const lines=S.COUNT_NAMES.slice(3).filter(n=>data.counts[n]>0).map(n=>n+': '+data.counts[n]);if(!lines.length){notify('No unload counts to share.');return;}share(lines.join('\n'));};
 $('share-levels').onclick=()=>{if(!validReadings())return;const lines=S.LEVEL_NAMES.filter(n=>levels[n]!==''&&Number(levels[n])>0).map(n=>n+': '+levels[n]+'%');if(!lines.length){notify('No levels recorded to share.');return;}share(['STERLING SPECIALTY — Levels',localDate(),...lines].join('\n'));};
 $('export').onclick=()=>{const rows=[['Timestamp','Mix 1','Mix 2','Mix 3','Pounds','AMD %','AA','NA','AN'],[new Date().toISOString(),...S.COUNT_NAMES.slice(0,3).map(n=>data.counts[n]),data.pounds,data.amd,...S.COUNT_NAMES.slice(3).map(n=>data.counts[n])]];download(rows.map(row=>row.map(S.csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','sterling-counts-'+S.workday()+'.csv');};
 $('calculate').onclick=()=>{const input=$('mix-input'),n=Number(input.value);if(input.value.trim()===''||!Number.isFinite(n)||n<0){notify('Enter a pounds value of zero or greater.');input.focus();return;}$('conversion-result').textContent=Math.ceil(n/2.205).toLocaleString('en-US')+' kg';input.blur();};
@@ -60,7 +63,7 @@ $('mix-input').onkeydown=e=>{if(e.key==='Enter')$('calculate').click();};
 function dailyValue(key){try{return localStorage.getItem(key);}catch{return null;}}
 function markDaily(key){try{localStorage.setItem(key,S.workday());paintDaily();}catch{notify('Could not save the daily indicator.');}}
 function paintDaily(){const day=S.workday(),bbs=dailyValue(K.bbs)===day,report=dailyValue(K.report)===day;
- $('bbs-request').classList.toggle('done',bbs);$('report-request').classList.toggle('done',report);$('nav-report-dot').classList.toggle('done',report);
+ $('bbs-request').classList.toggle('done',bbs);$('report-request').classList.toggle('done',report);
  $('bbs-request').setAttribute('aria-label',bbs?'BBS selected for this workday':'Open BBS');$('report-request').setAttribute('aria-label',report?'Report selected for this workday; open ChatGPT':'Give a shift report in ChatGPT');
  $('today').textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',weekday:'short',month:'short',day:'numeric'}).format(new Date(day+'T12:00:00Z'))+' · workday';$('shift-label').textContent=S.shift();
  clearTimeout(dayTimer);if(!document.hidden)dayTimer=setTimeout(paintDaily,60000-Date.now()%60000+40);
@@ -96,7 +99,7 @@ function handoff(record,open=true){if(!record)return;const prompt=S.buildPrompt(
 }
 function startReport(){select('report');markDaily(K.report);handoff(preparedReport());}
 $('report-request').onclick=startReport;$('report-chat').onclick=()=>{markDaily(K.report);handoff(preparedReport());};
-for(const button of document.querySelectorAll('[data-panel]'))button.onclick=()=>button.dataset.panel==='report'?startReport():select(button.dataset.panel);
+
 $('copy-report').onclick=()=>handoff(preparedReport(),false);
 $('save-report').onclick=()=>{const r=preparedReport();if(r){$('handoff-status').textContent='Saved on this device. The sheet has not been updated from this app.';notify('Report snapshot saved on this device.');}};
 let recognition=null;
@@ -137,26 +140,14 @@ $('backup-import').onchange=async event=>{const file=event.target.files[0];if(!f
  clearTimeout(draftTimer);restoring=true;location.reload();
  }catch(e){notify(e.message||'Could not restore this backup.');}finally{event.target.value='';}
 };
-$('copy-widget-script').onclick=async()=>{
- const button=$('copy-widget-script');button.disabled=true;
- try{const response=await fetch('./ios/Sterling-Counters.js?v=3.2.0');if(!response.ok)throw Error('Could not load the widget script. Reconnect and retry.');const source=await response.text();if(source.length>32000||!source.includes('Sterling Mix'))throw Error('Widget script unavailable.');
-  $('widget-script-text').value=source;$('widget-script-fallback').hidden=false;
-  try{await navigator.clipboard.writeText(source);$('widget-status').textContent='Script copied. In Scriptable, create a script, paste it, and name it Sterling Mix.';notify('Widget script copied.');}
-  catch{$('widget-script-fallback').open=true;$('widget-script-text').focus();$('widget-script-text').select();$('widget-status').textContent='Select and copy the script below, then paste it into a new Scriptable script named Sterling Mix.';}
- }catch(e){$('widget-status').textContent=e.message;}finally{button.disabled=false;}
-};
-for(const link of document.querySelectorAll('[data-widget-update]'))link.addEventListener('click',event=>{
- try{link.href=S.widgetURLAll(data.counts);$('widget-status').textContent='Opening Scriptable with the current mix counts. Check its preview; the Home Screen widget refreshes on the iOS schedule.';}
- catch{event.preventDefault();notify('Could not prepare the mix snapshot.');}
-});
-if(location.hash==='#widget-setup'){$('widget-setup').open=true;requestAnimationFrame(()=>$('widget-setup').scrollIntoView({block:'start'}));}
-$('calendar-details').addEventListener('toggle',()=>{if(!$('calendar-details').open||$('calendar-holder').childElementCount||!navigator.onLine)return;
+function loadCalendar(){if($('calendar-holder').childElementCount||!navigator.onLine)return;
  const iframe=document.createElement('iframe');iframe.title='Google Calendar agenda';iframe.loading='lazy';iframe.referrerPolicy='no-referrer';iframe.src='https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showCalendars=0&showPrint=0&showTabs=0&ctz=America%2FChicago&src=jasonjaggers%40gmail.com';$('calendar-holder').append(iframe);
-});
-function connectivity(){const online=navigator.onLine;$('connection').textContent=online?'Online':'Offline';$('connection').classList.toggle('offline',!online);if(!online)$('handoff-status').textContent='Offline · counters, notes and saved reports still work on this device.';}
+}
+loadCalendar();
+function connectivity(){const online=navigator.onLine;$('connection').textContent=online?'Online':'Offline';$('connection').classList.toggle('offline',!online);if(online)loadCalendar();if(!online)$('handoff-status').textContent='Offline · counters, notes and saved reports still work on this device.';}
 window.addEventListener('online',()=>{connectivity();notify('Connection restored. Your saved report is ready.');});window.addEventListener('offline',connectivity);
-window.addEventListener('storage',event=>{if(event.key===K.counts){data=S.normalizeCounts(read(K.counts,{}));undo=[];renderCounters();$('pounds').value=data.pounds;$('amd').value=data.amd;}
- if(event.key===K.levels){levels=S.normalizeLevels(read(K.levels,{}));for(const n of S.LEVEL_NAMES)$('level-'+n).value=levels[n];}
+window.addEventListener('storage',event=>{if(event.key===K.counts){data=S.normalizeCounts(read(K.counts,{}));undo=[];renderCounters();$('pounds').value=Number(data.pounds)===0?'':data.pounds;$('amd').value=Number(data.amd)===0?'':data.amd;}
+ if(event.key===K.levels){levels=S.normalizeLevels(read(K.levels,{}));for(const n of S.LEVEL_NAMES)$('level-'+n).value=Number(levels[n])===0?'':levels[n];}
  if(event.key===K.reports)reports=array(read(K.reports,[]));if(event.key===K.archives)archives=array(read(K.archives,[]));paintDaily();if(activePanel==='report')refreshSnapshot();if(activePanel==='history')renderHistory();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){saveDraft();clearTimeout(dayTimer);recognition?.stop();}else{paintDaily();connectivity();}});window.addEventListener('focus',paintDaily);window.addEventListener('pageshow',paintDaily);window.addEventListener('pagehide',saveDraft);
 let registration=null;
