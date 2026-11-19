@@ -1,4 +1,4 @@
-# Sterling Specialty · 3.2.5
+# Sterling Specialty · 3.2.6
 
 Compact, offline-ready shift counters at
 https://jasonjaggers.github.io/Tic-Counter-/ (GitHub Pages, main branch).
@@ -27,10 +27,16 @@ a saved pre-reset snapshot. Stored reports and reset snapshots remain in the exi
 
 ## Shift trends
 
-At the bottom of the app, download the Shift Log History CSV from Google Sheets,
-then import it. The app keeps the most recent 30 dated reports' readings on the
-device and graphs the selected measurement. Import a new export to refresh the
-graph.
+Tap **Load** below the calendar to read the private Shift Log History tab from
+Google Sheets. The chart keeps the latest 30 dated readings on the device and
+shows them on reopen. Google access tokens are used in memory only.
+
+For first-time setup, enable the Google Sheets API in a Google Cloud project,
+configure its OAuth consent screen, and create a web OAuth client with
+`https://jasonjaggers.github.io` as an authorized JavaScript origin. Add the
+account as a test user if the consent screen is in testing. Open **Google Sheets
+connection**, paste the public web client ID, save, and tap **Load**. Use a Google
+account that can read the shift log.
 
 ## Offline, speed and updating
 

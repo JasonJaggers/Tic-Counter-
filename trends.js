@@ -5,37 +5,28 @@
  const metric = document.getElementById('trend-metric');
  const plot = document.getElementById('trend-plot');
  const status = document.getElementById('trend-status');
- const files = document.getElementById('trend-file');
+ const load = document.getElementById('trend-load');
+ const message = document.getElementById('trend-load-message');
+ const connection = document.getElementById('trend-connection');
+ const clientField = document.getElementById('trend-client-id');
+ const clientKey = 'sterling-google-trends-client-v1';
+ const scope = 'https://www.googleapis.com/auth/spreadsheets.readonly';
+ const sourceUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + window.Sterling.SHEET_ID +
+  '/values/' + encodeURIComponent("'Shift Log History'!B7:H1005") + '?valueRenderOption=FORMATTED_VALUE';
  const numberFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
  const dateFormat = new Intl.DateTimeFormat('en-US', {
   month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'
  });
-
- function csvRows(text) {
-  // Match whole fields so quoted notes may contain commas, quotes and line breaks.
-  const rows = [[]];
-  const fields = /(?:"((?:[^"]|"")*)"|([^",\r\n]*))(,|\r\n|\n|\r|$)/gy;
-  while (fields.lastIndex < text.length) {
-   const field = fields.exec(text);
-   if (!field) throw Error('This file contains invalid CSV.');
-   const [, quoted, plain, separator] = field;
-   rows.at(-1).push(quoted === undefined ? plain : quoted.replaceAll('""', '"'));
-   if (separator && separator !== ',') rows.push([]);
-   if (separator === ',' && fields.lastIndex === text.length) rows.at(-1).push('');
-  }
-  return rows;
- }
 
  function reading(value) {
   const text = value?.trim() ?? '';
   return /^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(text) && Number.isFinite(Number(text)) ? Number(text) : null;
  }
 
- function shiftReports(text) {
-  const rows = csvRows(text.replace(/^\uFEFF/, ''));
+ function shiftReports(rows) {
   const headers = ['Date', 'Feed (GPM)', 'Belt Speed', 'TBHP', 'SS', 'Dryer Temperatures'];
   const headerIndex = rows.findIndex(row => headers.every(name => row.includes(name)));
-  if (headerIndex < 0) throw Error('Choose the CSV exported from Shift Log History.');
+  if (headerIndex < 0) throw Error('The Shift Log History columns have changed.');
   const [dateCol, feedCol, beltCol, tbhpCol, ssCol, dryerCol] =
    headers.map(name => rows[headerIndex].indexOf(name));
   const reports = rows.slice(headerIndex + 1).flatMap(row => {
@@ -60,11 +51,14 @@
  }
 
  let reports = [];
+ let clientId = '';
  try {
   const saved = JSON.parse(localStorage.getItem(storageKey) ?? '[]');
   if (Array.isArray(saved)) reports = saved;
+  clientId = localStorage.getItem(clientKey) ?? '';
+  clientField.value = clientId;
  } catch {
-  // The trend remains available for a fresh import.
+  // The trend remains available for a fresh load.
  }
 
  function render() {
@@ -73,7 +67,7 @@
   const points = reports.map(report => ({...report, value: report.values[index]}));
   const measured = points.filter(point => Number.isFinite(point.value));
   if (!measured.length) {
-   status.textContent = reports.length ? 'No readings for this measurement.' : 'Import a Shift Log History CSV to see your trends.';
+   status.textContent = reports.length ? 'No readings for this measurement.' : 'Tap Load to retrieve the latest shift reports.';
    return;
   }
 
@@ -117,22 +111,89 @@
  }
 
  metric.addEventListener('change', render);
- files.addEventListener('change', async () => {
-  const file = files.files[0];
-  if (!file) return;
-  const message = document.getElementById('trend-import-message');
+ document.getElementById('trend-connection-form').addEventListener('submit', event => {
+  event.preventDefault();
+  const value = clientField.value.trim();
+  if (!/^[a-z0-9-]+\.apps\.googleusercontent\.com$/i.test(value)) {
+   message.textContent = 'Enter a Google OAuth web client ID.';
+   return;
+  }
   try {
-   if (file.size > 5_000_000) throw Error('Choose a CSV under 5 MB.');
-   const next = shiftReports(await file.text());
-   if (!next.length) throw Error('No dated readings were found in this CSV.');
-   localStorage.setItem(storageKey, JSON.stringify(next));
+   localStorage.setItem(clientKey, value);
+   clientId = value;
+   connection.open = false;
+   message.textContent = 'Connection saved. Tap Load to authorize Google Sheets.';
+  } catch {
+   message.textContent = 'Could not save the connection on this device.';
+  }
+ });
+
+ function finish(text) {
+  message.textContent = text;
+  load.disabled = false;
+ }
+
+ async function fetchReports(token) {
+  try {
+   const response = await fetch(sourceUrl, {
+    headers: {Authorization: 'Bearer ' + token},
+    cache: 'no-store',
+    signal: AbortSignal.timeout(15000)
+   });
+   if (!response.ok) {
+    if (response.status === 403) throw Error('Google denied access. Check your sheet access and that the Google Sheets API is enabled.');
+    throw Error('Google Sheets could not load the reports. Try Load again.');
+   }
+   const result = await response.json();
+   const next = shiftReports(result.values ?? []);
+   if (!next.length) throw Error('No dated readings were found in Shift Log History.');
    reports = next;
-   message.textContent = '';
    render();
+   try {
+    localStorage.setItem(storageKey, JSON.stringify(next));
+    finish('');
+   } catch {
+    finish('Readings loaded, but this device could not save them for next time.');
+   }
   } catch (error) {
-   message.textContent = error.name === 'QuotaExceededError' ? 'There is not enough device storage for this import.' : error.message;
-  } finally {
-   files.value = '';
+   finish(error.message);
+  }
+ }
+
+ load.addEventListener('click', () => {
+  if (!navigator.onLine) {
+   finish('Connect to the internet to load the latest reports.');
+   return;
+  }
+  if (!clientId) {
+   connection.open = true;
+   clientField.focus();
+   finish('Set up the Google Sheets connection before loading reports.');
+   return;
+  }
+  const oauth = window.google?.accounts?.oauth2;
+  if (!oauth) {
+   finish('Google sign-in is unavailable. Reload the page and try again.');
+   return;
+  }
+  load.disabled = true;
+  message.textContent = 'Connecting to Google Sheets…';
+  try {
+   oauth.initTokenClient({
+    client_id: clientId,
+    scope,
+    include_granted_scopes: false,
+    callback: result => {
+     if (!result.access_token) {
+      finish('Google did not authorize access to the sheet.');
+      return;
+     }
+     fetchReports(result.access_token);
+    },
+    error_callback: () => finish('Google sign-in did not complete. Tap Load to try again.')
+   }).requestAccessToken({prompt: ''});
+  } catch {
+   finish('Google sign-in could not start. Check the connection settings.');
   }
  });
 
