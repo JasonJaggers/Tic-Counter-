@@ -39,20 +39,3 @@ body{padding-top:calc(env(safe-area-inset-top) + 8px)}
 #report-notes{border:1px solid var(--line);border-radius:9px;padding:10px;font-size:16px;background:var(--surface)}
 #report-form .primary-button{justify-content:center;margin-top:12px}
 #report-error{font-size:14px;color:var(--danger)}
-
-.trend-card{padding:12px;margin-top:16px}
-.trend-card h2{font-size:15px;margin:0 0 10px}
-.trend-card select{color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;font:inherit;font-size:16px;min-height:44px;padding:0 10px}
-#trend-plot svg{display:block;width:100%;height:auto;margin:8px 0 0}
-#trend-plot text{fill:var(--muted);stroke:none;font-size:10px}
-.trend-gridline{stroke:var(--line);stroke-width:1}
-.trend-line{stroke:var(--blue);stroke-width:2}
-#trend-plot .trend-dot{fill:var(--blue);stroke:none}
-.trend-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
-#trend-connection summary{color:var(--muted);font-size:13px;cursor:pointer;padding-top:12px}
-#trend-connection-form{display:grid;gap:8px;font-size:13px}
-#trend-client-id{border:1px solid var(--line);border-radius:8px;padding:10px;font-size:16px}
-#trend-connection-form button{justify-self:start}
-#trend-status,#trend-load-message{font-size:13px;line-height:1.45;color:var(--muted);margin:8px 0}
-#trend-load-message{color:var(--danger)}
-#trend-load-message:empty{display:none}
