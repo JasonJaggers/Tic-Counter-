@@ -9,13 +9,13 @@ body{padding-bottom:calc(env(safe-area-inset-bottom) + 30px)}
 .category-actions{display:flex;justify-content:space-between;align-items:center;margin:0 0 9px;gap:10px}
 .category-actions button{border:1px solid #354c66;border-radius:9px;background:var(--raised);color:#c6d9f1;min-height:36px;padding:7px 14px;font-size:12px;font-weight:600}
 .category-actions .small-undo{font-size:10px;min-height:32px;padding:5px 10px;background:transparent;color:var(--muted)}
-.always-calendar{padding:12px;margin-top:16px}.always-calendar h2{font-size:12px;margin:3px 0 12px}.always-calendar iframe{height:300px;margin-top:10px}
+.always-calendar{padding:12px;margin-top:16px}.always-calendar iframe{height:300px;margin-top:10px}
 #toast{bottom:calc(env(safe-area-inset-bottom) + 20px)}
 
 /* Keep the menu in document flow so focused iOS inputs cannot overlap it. */
-.brand-header{flex-wrap:wrap;padding-bottom:13px}
-#menu-toggle{display:grid;place-items:center;margin-left:auto;width:56px;height:52px;border:1px solid var(--line);border-radius:11px;background:transparent;color:var(--ink)}
-#menu-toggle svg{width:30px;height:30px;stroke-width:2}
+.brand-header{flex-wrap:wrap;padding-bottom:7px}
+#menu-toggle{display:grid;place-items:center;margin-left:auto;width:44px;height:44px;border:1px solid var(--line);border-radius:11px;background:transparent;color:var(--ink)}
+#menu-toggle svg{width:25px;height:25px;stroke-width:2}
 #menu-toggle[aria-expanded=true]{background:var(--raised)}
 .menu-items{flex:0 0 100%;padding:6px;background:#202e43;border:1px solid #52617b;border-radius:12px}
 .menu-items>a,.menu-items>button{display:flex;align-items:center;width:100%;min-height:46px;padding:10px 12px;border:0;background:transparent;color:var(--ink);font-size:14px;text-align:left}
@@ -23,12 +23,14 @@ body{padding-bottom:calc(env(safe-area-inset-bottom) + 30px)}
 .menu-items>*:hover,.menu-items>*:active{background:#364862}
 .menu-items .daily-dot{position:static;margin-left:auto}
 .menu-items .done .daily-dot{display:block}
-.brand-header+.panel{margin-top:12px}
+.brand-header+.panel{margin-top:6px}
+body{padding-top:calc(env(safe-area-inset-top) + 8px)}
+#mix,#trucks,.hold-grid,#level-counters{margin-top:9px}
 .counter-value:empty{min-height:1.15em}
 .category-actions button{min-height:44px;font-size:13px}
 .category-actions .small-undo{display:grid;place-items:center;width:44px;padding:0}
 .category-actions .small-undo svg{width:20px;height:20px}
-.undo-only{justify-content:flex-end}
+.edit-actions{display:flex;gap:8px}
 .share-row{margin-top:9px}
 .share-row .text-button{border:0;background:none;padding:0}
 #report-panel{width:min(540px,calc(100% - 28px));max-height:calc(100% - 36px);padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--ink)}

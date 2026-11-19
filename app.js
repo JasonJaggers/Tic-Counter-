@@ -11,7 +11,7 @@ function persist(key,value){try{if(storageBlocked)throw Error('storage blocked')
 const array=(value)=>Array.isArray(value)?value.filter(x=>x&&typeof x==='object'):[];
 let data=S.normalizeCounts(read(K.counts,{})),levels=S.normalizeLevels(read(K.levels,{}));
 let archives=array(read(K.archives,[]));
-let undo=[];
+let undo=[],levelUndo=null;
 const menu=$('app-menu'),menuToggle=$('menu-toggle');
 function setMenu(open){
  menu.hidden=!open;
@@ -38,13 +38,7 @@ document.addEventListener('keydown',event=>{
 const localDate=()=>new Date().toLocaleString('en-US',{timeZone:'America/Chicago',dateStyle:'medium',timeStyle:'short'});
 function snapshot(){return {created:localDate(),counts:{...data.counts},hold:data.pounds,amd:data.amd,levels:{...levels}};}
 function download(body,type,name){const blob=new Blob([body],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
-function totals(){
- for(const [id,names] of [['mix-total',S.COUNT_NAMES.slice(0,3)],['unload-total',S.COUNT_NAMES.slice(3)]]){
-  const total=names.reduce((sum,name)=>sum+data.counts[name],0);
-  $(id).textContent=total ? total+' total' : '';
- }
-}
-function renderCounters(){for(const name of S.COUNT_NAMES)$('n-'+name.replace(' ','-')).textContent=data.counts[name]===0?'':data.counts[name];totals();}
+function renderCounters(){for(const name of S.COUNT_NAMES)$('n-'+name.replace(' ','-')).textContent=data.counts[name]===0?'':data.counts[name];}
 for(const [parent,names] of [[$('mix'),S.COUNT_NAMES.slice(0,3)],[$('trucks'),S.COUNT_NAMES.slice(3)]]){
  for(const name of names){const card=document.createElement('article');card.className='counter';
  const label=document.createElement('span');label.className='counter-label';label.textContent=name;
@@ -61,19 +55,37 @@ for(const name of S.LEVEL_NAMES){const card=document.createElement('div');card.c
  const wrap=document.createElement('div');wrap.className='input-unit';const input=document.createElement('input');
  Object.assign(input,{id:'level-'+name,type:'number',inputMode:'decimal',min:'0',max:'99',step:'any',placeholder:' ',value:Number(levels[name])===0?'':levels[name]});input.setAttribute('aria-label',name+' level percentage');
  const unit=document.createElement('span');unit.textContent='%';
+ let beforeEdit;
+ input.onfocus=()=>{beforeEdit={...levels};};
+ input.onblur=()=>{if(beforeEdit&&beforeEdit[name]!==levels[name])levelUndo=beforeEdit;beforeEdit=null;};
  input.oninput=()=>{if(!input.validity.valid)return;const previous=levels[name];levels[name]=input.value;if(!persist(K.levels,levels)){levels[name]=previous;input.value=previous;}};
  input.onchange=()=>{if(!input.validity.valid){notify('Tank levels must be from 0 to 99%.');input.focus();}};
  wrap.append(input,unit);card.append(label,wrap);$('level-counters').append(card);
 }
-function undoCategory(names){const index=undo.findLastIndex(item=>names.includes(item.name));const item=undo[index];if(!item){notify('No recent tap to undo.');return;}const current=data.counts[item.name];data.counts[item.name]=item.value;if(!persist(K.counts,data)){data.counts[item.name]=current;return;}undo.splice(index,1);renderCounters();notify('Undid '+item.name+'.');}
-$('undo-mix').onclick=()=>undoCategory(S.COUNT_NAMES.slice(0,3));
-$('undo-unload').onclick=()=>undoCategory(S.COUNT_NAMES.slice(3));
+$('undo-counts').onclick=()=>{
+ const item=undo.at(-1);if(!item){notify('No recent count to undo.');return;}
+ const current=data.counts[item.name];data.counts[item.name]=item.value;
+ if(!persist(K.counts,data)){data.counts[item.name]=current;return;}
+ undo.pop();renderCounters();notify('Undid '+item.name+'.');
+};
+function applyLevels(next){
+ if(!persist(K.levels,next))return false;
+ levels=next;
+ for(const name of S.LEVEL_NAMES)$('level-'+name).value=Number(levels[name])===0?'':levels[name];
+ return true;
+}
+$('undo-levels').onclick=()=>{
+ const active=document.activeElement;
+ if(active?.id?.startsWith('level-'))active.blur();
+ if(!levelUndo){notify('No recent level change to undo.');return;}
+ if(applyLevels(levelUndo)){levelUndo=null;notify('Tank levels restored.');}
+};
 function archive(){const next=[snapshot(),...archives].slice(0,120);if(!persist(K.archives,next))return false;archives=next;return true;}
 $('reset').onclick=()=>{if(!confirm('Reset mix/unload counts, hold pounds and AMD? A snapshot will be saved first.'))return;if(!archive())return;
  const previous=data;data=S.normalizeCounts({pounds:'0',amd:'0'});if(!persist(K.counts,data)){data=previous;return;}
  undo=[];renderCounters();$('pounds').value='';$('amd').value='';notify('Counts reset. Previous snapshot saved on device.');};
-$('reset-levels').onclick=()=>{if(!confirm('Reset all tank levels to zero? A snapshot will be saved first.'))return;if(!archive())return;const previous=levels;
- levels=Object.fromEntries(S.LEVEL_NAMES.map(k=>[k,'0']));if(!persist(K.levels,levels)){levels=previous;return;}for(const k of S.LEVEL_NAMES)$('level-'+k).value='';notify('Levels reset. Previous snapshot saved on device.');};
+$('reset-levels').onclick=()=>{if(document.activeElement?.id?.startsWith('level-'))document.activeElement.blur();if(!confirm('Reset all tank levels to zero? A snapshot will be saved first.'))return;if(!archive())return;const previous=levels;
+ if(!applyLevels(Object.fromEntries(S.LEVEL_NAMES.map(k=>[k,'0']))))return;levelUndo=previous;notify('Levels reset. Previous snapshot saved on device.');};
 function validReadings(ids){for(const id of ids){if(!$(id).validity.valid){notify('Check the highlighted reading before sharing.');$(id).reportValidity();$(id).focus();return false;}}return true;}
 async function share(text){if(navigator.share){try{await navigator.share({text});return;}catch(e){if(e.name==='AbortError')return;}}location.href='sms:&body='+encodeURIComponent(text);}
 $('share').onclick=()=>{if(!validReadings(['pounds','amd']))return;const lines=S.COUNT_NAMES.filter(n=>data.counts[n]>0).map(n=>n+': '+data.counts[n]);if(data.pounds!==''&&Number(data.pounds)!==0)lines.push('Hold: '+Number(data.pounds).toLocaleString('en-US')+' lb');if(data.amd!==''&&Number(data.amd)!==0)lines.push('AMD: '+data.amd+'%');if(!lines.length){notify('Nothing recorded to share.');return;}share(lines.join('\n'));};
@@ -111,7 +123,7 @@ function loadCalendar(){if($('calendar-holder').childElementCount||!navigator.on
 }
 window.addEventListener('online',loadCalendar);
 window.addEventListener('storage',event=>{if(event.key===K.counts){data=S.normalizeCounts(read(K.counts,{}));undo=[];renderCounters();$('pounds').value=Number(data.pounds)===0?'':data.pounds;$('amd').value=Number(data.amd)===0?'':data.amd;}
- if(event.key===K.levels){levels=S.normalizeLevels(read(K.levels,{}));for(const n of S.LEVEL_NAMES)$('level-'+n).value=Number(levels[n])===0?'':levels[n];}
+ if(event.key===K.levels){if(document.activeElement?.id?.startsWith('level-'))document.activeElement.blur();levelUndo=null;levels=S.normalizeLevels(read(K.levels,{}));for(const n of S.LEVEL_NAMES)$('level-'+n).value=Number(levels[n])===0?'':levels[n];}
  if(event.key===K.archives)archives=array(read(K.archives,[]));paintDaily();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(dayTimer);}else{paintDaily();loadCalendar();}});
 window.addEventListener('focus',paintDaily);window.addEventListener('pageshow',paintDaily);

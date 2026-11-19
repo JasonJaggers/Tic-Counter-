@@ -1,4 +1,4 @@
-# Sterling Specialty · 3.2.3
+# Sterling Specialty · 3.2.4
 
 Compact, offline-ready shift counters at
 https://jasonjaggers.github.io/Tic-Counter-/ (GitHub Pages, main branch).
