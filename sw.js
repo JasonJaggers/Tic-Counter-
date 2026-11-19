@@ -1,7 +1,7 @@
 'use strict';
-const REVISION='3.2.4',CACHE='sterling-specialty-cache-v37';
-const FILES=['./','./index.html','./app.css?v='+REVISION,'./report.js?v='+REVISION,'./app.js?v='+REVISION,'./manifest.webmanifest','./sterling-specialty-icon-full.png'];
-const STATIC=new Set(['app.css','report.js','app.js','manifest.webmanifest','sterling-specialty-icon-full.png']);
+const REVISION='3.2.5',CACHE='sterling-specialty-cache-v38';
+const FILES=['./','./index.html','./app.css?v='+REVISION,'./report.js?v='+REVISION,'./app.js?v='+REVISION,'./trends.js?v='+REVISION,'./manifest.webmanifest','./sterling-specialty-icon-full.png'];
+const STATIC=new Set(['app.css','report.js','app.js','trends.js','manifest.webmanifest','sterling-specialty-icon-full.png']);
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('sterling-specialty-cache-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 async function navigation(request){

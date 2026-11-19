@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0c121c"><meta name="app-version" content="3.2.4">
+<meta name="theme-color" content="#0c121c"><meta name="app-version" content="3.2.5">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sterling"><meta name="description" content="Your compact, offline-ready Sterling shift workspace.">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="sterling-specialty-icon-full.png">
-<link rel="stylesheet" href="app.css?v=3.2.4"><script src="report.js?v=3.2.4" defer></script><script src="app.js?v=3.2.4" defer></script>
+<link rel="stylesheet" href="app.css?v=3.2.5"><script src="report.js?v=3.2.5" defer></script><script src="app.js?v=3.2.5" defer></script><script src="trends.js?v=3.2.5" defer></script>
 <title>Sterling · Shift workspace</title></head><body>
 <main>
-<header class="brand-header"><img src="sterling-specialty-icon-full.png" width="32" height="32" alt="Sterling Specialty"><span class="version">3.2.4</span><button id="menu-toggle" type="button" aria-label="App menu" aria-controls="app-menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18M3 12h18M3 19h18"/></svg></button><nav id="app-menu" class="menu-items" aria-label="App shortcuts" hidden><a id="maintenance-request" href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYjYirSKb_9RJnPVbEZGRGXVUOVlHOFhDN1RGUkJZVFNDSjI5NFM0WjJaNC4u&amp;origin=QRCode&amp;route=shorturl" target="_blank" rel="noopener noreferrer">Maintenance</a><a id="hazards-request" href="https://app.industrysafe.com/default.asp?__hstc=108400413.b5ab5a05ea64dff45301da1252f9e8e6.1685735468245.1732722102562.1732744063648.841&amp;__hssc=108400413.5.1732744063648&amp;__hsfp=2522753148" target="_blank" rel="noopener noreferrer">Vector</a><a id="bbs-request" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYvc20LGvfjhIt1-2If4mnyNUMVdXTzU4VVg1V0Y2N0JMME1BS1lKQzVZSy4u&amp;origin=QRCode" target="_blank" rel="noopener noreferrer">BBS <i class="daily-dot" aria-hidden="true"></i></a><button id="report-request" type="button">Report <i class="daily-dot" aria-hidden="true"></i></button><button id="export" type="button">Export CSV</button></nav></header>
+<header class="brand-header"><img src="sterling-specialty-icon-full.png" width="32" height="32" alt="Sterling Specialty"><span class="version">3.2.5</span><button id="menu-toggle" type="button" aria-label="App menu" aria-controls="app-menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18M3 12h18M3 19h18"/></svg></button><nav id="app-menu" class="menu-items" aria-label="App shortcuts" hidden><a id="maintenance-request" href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYjYirSKb_9RJnPVbEZGRGXVUOVlHOFhDN1RGUkJZVFNDSjI5NFM0WjJaNC4u&amp;origin=QRCode&amp;route=shorturl" target="_blank" rel="noopener noreferrer">Maintenance</a><a id="hazards-request" href="https://app.industrysafe.com/default.asp?__hstc=108400413.b5ab5a05ea64dff45301da1252f9e8e6.1685735468245.1732722102562.1732744063648.841&amp;__hssc=108400413.5.1732744063648&amp;__hsfp=2522753148" target="_blank" rel="noopener noreferrer">Vector</a><a id="bbs-request" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=PcWvcY-2bEqoNOh2Xu0gYvc20LGvfjhIt1-2If4mnyNUMVdXTzU4VVg1V0Y2N0JMME1BS1lKQzVZSy4u&amp;origin=QRCode" target="_blank" rel="noopener noreferrer">BBS <i class="daily-dot" aria-hidden="true"></i></a><button id="report-request" type="button">Report <i class="daily-dot" aria-hidden="true"></i></button><button id="export" type="button">Export CSV</button></nav></header>
 <section id="home-panel" class="panel" aria-label="Shift counters">
 <details id="mix-converter" class="utility-card" open><summary><span>Mix conversion</span><span>lb → kg</span></summary><div class="calc-row"><label class="sr-only" for="mix-input">Pounds to convert to kilograms</label><input id="mix-input" type="number" min="0" inputmode="decimal" placeholder="Pounds"><button id="calculate" type="button">Convert</button></div><output id="conversion-result" aria-live="polite"></output></details>
 <div id="mix" class="counter-grid"></div>
@@ -21,6 +21,27 @@
 
 <section id="calendar-details" class="utility-card always-calendar"><div class="shortcut-links"><a href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener noreferrer">Google Calendar ↗</a><a id="adp-request" href="adpmobile://">Open ADP ↗</a></div><div id="calendar-holder"></div></section>
 <p class="device-note">Counters stay on this device. Daily dots reset at 6:10 am CT.</p>
+<section class="utility-card trend-card" aria-labelledby="trend-title">
+  <h2 id="trend-title">Shift trends</h2>
+  <label class="sr-only" for="trend-metric">Trend measurement</label>
+  <select id="trend-metric">
+    <option value="0">Feed (GPM)</option>
+    <option value="1">Belt speed</option>
+    <option value="2">TBHP</option>
+    <option value="3">SS</option>
+    <option value="4">Dryer zone 1</option>
+    <option value="5">Dryer zone 2</option>
+    <option value="6">Dryer zone 3</option>
+    <option value="7">Dryer zone 4</option>
+  </select>
+  <div id="trend-plot"></div>
+  <p id="trend-status" role="status"></p>
+  <div class="trend-actions">
+    <a href="https://docs.google.com/spreadsheets/d/1HXEiHzmICemn7aVLVQQ6ubGKCImIoTr6DdImbgklfps/export?format=csv&amp;gid=0" target="_blank" rel="noopener">Download CSV</a>
+    <label class="button-label">Import CSV<input id="trend-file" class="sr-only" type="file" accept=".csv,text/csv"></label>
+  </div>
+  <p id="trend-import-message" role="status"></p>
+</section>
 </section>
 <dialog id="report-panel" aria-labelledby="report-title">
 <form id="report-form">

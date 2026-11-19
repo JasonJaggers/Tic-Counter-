@@ -1,4 +1,4 @@
-# Sterling Specialty · 3.2.4
+# Sterling Specialty · 3.2.5
 
 Compact, offline-ready shift counters at
 https://jasonjaggers.github.io/Tic-Counter-/ (GitHub Pages, main branch).
@@ -24,6 +24,13 @@ sterling-v21-reports and sterling-v21-draft storage keys migrate in place. Stora
 failures stop count changes/resets from silently dropping readings. Reset requires
 a saved pre-reset snapshot. Stored reports and reset snapshots remain in the existing storage keys. Reset snapshots retain the previous
 120-record cap.
+
+## Shift trends
+
+At the bottom of the app, download the Shift Log History CSV from Google Sheets,
+then import it. The app keeps the most recent 30 dated reports' readings on the
+device and graphs the selected measurement. Import a new export to refresh the
+graph.
 
 ## Offline, speed and updating
 
