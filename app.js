@@ -22,11 +22,11 @@ function totals(){
  $('mix-total').textContent=S.COUNT_NAMES.slice(0,3).reduce((n,k)=>n+data.counts[k],0)+' total';
  $('unload-total').textContent=S.COUNT_NAMES.slice(3).reduce((n,k)=>n+data.counts[k],0)+' total';
 }
-function renderCounters(){for(const name of S.COUNT_NAMES)$('n-'+name.replace(' ','-')).textContent=data.counts[name];totals();}
+function renderCounters(){for(const name of S.COUNT_NAMES)$('n-'+name.replace(' ','-')).textContent=data.counts[name]===0?'':data.counts[name];totals();}
 for(const [parent,names] of [[$('mix'),S.COUNT_NAMES.slice(0,3)],[$('trucks'),S.COUNT_NAMES.slice(3)]]){
  for(const name of names){const card=document.createElement('article');card.className='counter';
  const label=document.createElement('span');label.className='counter-label';label.textContent=name;
- const count=document.createElement('div');count.className='counter-value';count.id='n-'+name.replace(' ','-');count.textContent=data.counts[name];
+ const count=document.createElement('div');count.className='counter-value';count.id='n-'+name.replace(' ','-');count.textContent=data.counts[name]===0?'':data.counts[name];
  const button=document.createElement('button');button.type='button';button.className='plus';button.textContent='+';button.setAttribute('aria-label','Add one to '+name);
  button.onclick=()=>{if(!Number.isSafeInteger(data.counts[name]+1)){notify('Count is at the maximum supported value.');return;}
  const previous=data.counts[name];data.counts[name]++;if(!persist(K.counts,data)){data.counts[name]=previous;return;}
@@ -65,7 +65,7 @@ function markDaily(key){try{localStorage.setItem(key,S.workday());paintDaily();}
 function paintDaily(){const day=S.workday(),bbs=dailyValue(K.bbs)===day,report=dailyValue(K.report)===day;
  $('bbs-request').classList.toggle('done',bbs);$('report-request').classList.toggle('done',report);
  $('bbs-request').setAttribute('aria-label',bbs?'BBS selected for this workday':'Open BBS');$('report-request').setAttribute('aria-label',report?'Report selected for this workday; open ChatGPT':'Give a shift report in ChatGPT');
- $('today').textContent=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',weekday:'short',month:'short',day:'numeric'}).format(new Date(day+'T12:00:00Z'))+' · workday';$('shift-label').textContent=S.shift();
+ 
  clearTimeout(dayTimer);if(!document.hidden)dayTimer=setTimeout(paintDaily,60000-Date.now()%60000+40);
 }
 $('bbs-request').addEventListener('click',()=>markDaily(K.bbs));
@@ -144,7 +144,7 @@ function loadCalendar(){if($('calendar-holder').childElementCount||!navigator.on
  const iframe=document.createElement('iframe');iframe.title='Google Calendar agenda';iframe.loading='lazy';iframe.referrerPolicy='no-referrer';iframe.src='https://calendar.google.com/calendar/embed?mode=AGENDA&showTitle=0&showCalendars=0&showPrint=0&showTabs=0&ctz=America%2FChicago&src=jasonjaggers%40gmail.com';$('calendar-holder').append(iframe);
 }
 loadCalendar();
-function connectivity(){const online=navigator.onLine;$('connection').textContent=online?'Online':'Offline';$('connection').classList.toggle('offline',!online);if(online)loadCalendar();if(!online)$('handoff-status').textContent='Offline · counters, notes and saved reports still work on this device.';}
+function connectivity(){const online=navigator.onLine;if(online)loadCalendar();if(!online)$('handoff-status').textContent='Offline · counters, notes and saved reports still work on this device.';}
 window.addEventListener('online',()=>{connectivity();notify('Connection restored. Your saved report is ready.');});window.addEventListener('offline',connectivity);
 window.addEventListener('storage',event=>{if(event.key===K.counts){data=S.normalizeCounts(read(K.counts,{}));undo=[];renderCounters();$('pounds').value=Number(data.pounds)===0?'':data.pounds;$('amd').value=Number(data.amd)===0?'':data.amd;}
  if(event.key===K.levels){levels=S.normalizeLevels(read(K.levels,{}));for(const n of S.LEVEL_NAMES)$('level-'+n).value=Number(levels[n])===0?'':levels[n];}
