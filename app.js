@@ -12,19 +12,27 @@ const array=(value)=>Array.isArray(value)?value.filter(x=>x&&typeof x==='object'
 let data=S.normalizeCounts(read(K.counts,{})),levels=S.normalizeLevels(read(K.levels,{}));
 let archives=array(read(K.archives,[]));
 let undo=[];
-const menu=document.querySelector('.header-menu');
-const menuToggle=menu.querySelector('summary');
-menu.querySelector('.menu-items').addEventListener('click',event=>{
- if(!event.target.closest('a,button'))return;
- menu.open=false;
- menuToggle.focus();
+const menu=$('app-menu'),menuToggle=$('menu-toggle');
+function setMenu(open){
+ menu.hidden=!open;
+ menuToggle.setAttribute('aria-expanded',String(open));
+}
+menuToggle.addEventListener('click',()=>{
+ const open=menu.hidden;
+ if(open&&document.activeElement.matches('input,textarea'))document.activeElement.blur();
+ setMenu(open);
 });
-document.addEventListener('click',event=>{
- if(!menu.contains(event.target))menu.open=false;
+menu.addEventListener('click',event=>{
+ if(!event.target.closest('a,button'))return;
+ setMenu(false);
+ if(!$('report-panel').open)menuToggle.focus();
+});
+document.addEventListener('pointerdown',event=>{
+ if(!menu.contains(event.target)&&!menuToggle.contains(event.target))setMenu(false);
 });
 document.addEventListener('keydown',event=>{
- if(event.key!=='Escape'||!menu.open)return;
- menu.open=false;
+ if(event.key!=='Escape'||menu.hidden)return;
+ setMenu(false);
  menuToggle.focus();
 });
 const localDate=()=>new Date().toLocaleString('en-US',{timeZone:'America/Chicago',dateStyle:'medium',timeStyle:'short'});
@@ -66,11 +74,10 @@ $('reset').onclick=()=>{if(!confirm('Reset mix/unload counts, hold pounds and AM
  undo=[];renderCounters();$('pounds').value='';$('amd').value='';notify('Counts reset. Previous snapshot saved on device.');};
 $('reset-levels').onclick=()=>{if(!confirm('Reset all tank levels to zero? A snapshot will be saved first.'))return;if(!archive())return;const previous=levels;
  levels=Object.fromEntries(S.LEVEL_NAMES.map(k=>[k,'0']));if(!persist(K.levels,levels)){levels=previous;return;}for(const k of S.LEVEL_NAMES)$('level-'+k).value='';notify('Levels reset. Previous snapshot saved on device.');};
-function validReadings(){for(const id of ['pounds','amd',...S.LEVEL_NAMES.map(n=>'level-'+n)]){if(!$(id).validity.valid){notify('Check the highlighted reading before sharing.');$(id).reportValidity();$(id).focus();return false;}}return true;}
+function validReadings(ids){for(const id of ids){if(!$(id).validity.valid){notify('Check the highlighted reading before sharing.');$(id).reportValidity();$(id).focus();return false;}}return true;}
 async function share(text){if(navigator.share){try{await navigator.share({text});return;}catch(e){if(e.name==='AbortError')return;}}location.href='sms:&body='+encodeURIComponent(text);}
-$('share').onclick=()=>{if(!validReadings())return;const lines=S.COUNT_NAMES.filter(n=>data.counts[n]>0).map(n=>n+': '+data.counts[n]);if(data.pounds!==''&&Number(data.pounds)!==0)lines.push('Hold: '+Number(data.pounds).toLocaleString('en-US')+' lb');if(data.amd!==''&&Number(data.amd)!==0)lines.push('AMD: '+data.amd+'%');if(!lines.length){notify('Nothing recorded to share.');return;}share(lines.join('\n'));};
-$('share-unloads').onclick=()=>{const lines=S.COUNT_NAMES.slice(3).filter(n=>data.counts[n]>0).map(n=>n+': '+data.counts[n]);if(!lines.length){notify('No unload counts to share.');return;}share(lines.join('\n'));};
-$('share-levels').onclick=()=>{if(!validReadings())return;const lines=S.LEVEL_NAMES.filter(n=>levels[n]!==''&&Number(levels[n])>0).map(n=>n+': '+levels[n]+'%');if(!lines.length){notify('No levels recorded to share.');return;}share(['STERLING SPECIALTY — Levels',localDate(),...lines].join('\n'));};
+$('share').onclick=()=>{if(!validReadings(['pounds','amd']))return;const lines=S.COUNT_NAMES.filter(n=>data.counts[n]>0).map(n=>n+': '+data.counts[n]);if(data.pounds!==''&&Number(data.pounds)!==0)lines.push('Hold: '+Number(data.pounds).toLocaleString('en-US')+' lb');if(data.amd!==''&&Number(data.amd)!==0)lines.push('AMD: '+data.amd+'%');if(!lines.length){notify('Nothing recorded to share.');return;}share(lines.join('\n'));};
+$('share-levels').onclick=()=>{if(!validReadings(S.LEVEL_NAMES.map(name=>'level-'+name)))return;const lines=S.LEVEL_NAMES.filter(n=>levels[n]!==''&&Number(levels[n])>0).map(n=>n+': '+levels[n]+'%');if(!lines.length){notify('No levels recorded to share.');return;}share(lines.join('\n'));};
 $('export').onclick=()=>{const rows=[['Timestamp','Mix 1','Mix 2','Mix 3','Pounds','AMD %','AA','NA','AN'],[new Date().toISOString(),...S.COUNT_NAMES.slice(0,3).map(n=>data.counts[n]),data.pounds,data.amd,...S.COUNT_NAMES.slice(3).map(n=>data.counts[n])]];download(rows.map(row=>row.map(S.csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','sterling-counts-'+S.workday()+'.csv');};
 $('calculate').onclick=()=>{const input=$('mix-input'),n=Number(input.value);if(input.value.trim()===''||!Number.isFinite(n)||n<0){notify('Enter a pounds value of zero or greater.');input.focus();return;}$('conversion-result').textContent=Math.ceil(n/2.205).toLocaleString('en-US')+' kg';input.blur();};
 $('mix-input').onkeydown=e=>{if(e.key==='Enter')$('calculate').click();};
@@ -108,13 +115,10 @@ window.addEventListener('storage',event=>{if(event.key===K.counts){data=S.normal
  if(event.key===K.archives)archives=array(read(K.archives,[]));paintDaily();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(dayTimer);}else{paintDaily();loadCalendar();}});
 window.addEventListener('focus',paintDaily);window.addEventListener('pageshow',paintDaily);
-let registration=null;
-$('update-app').onclick=()=>location.reload();
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
- const controlled=!!navigator.serviceWorker.controller;
- navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>{registration=reg;reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(worker)worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&controlled)$('update-app').hidden=false;});});if(reg.waiting)$('update-app').hidden=false;}).catch(()=>notify('Offline setup could not finish. Your saved data is kept.'));
- navigator.serviceWorker.addEventListener('controllerchange',()=>{if(controlled)$('update-app').hidden=false;});
- window.addEventListener('online',()=>registration?.update().catch(()=>{}));
+ navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>{
+  window.addEventListener('online',()=>reg.update().catch(()=>{}));
+ }).catch(()=>notify('Offline setup could not finish. Your saved data is kept.'));
 }
 renderCounters();paintDaily();loadCalendar();
 if(storageBlocked)notify('Device storage is unavailable. Check available storage before resetting.');

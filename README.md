@@ -1,4 +1,4 @@
-# Sterling Specialty · 3.2.2
+# Sterling Specialty · 3.2.3
 
 Compact, offline-ready shift counters at
 https://jasonjaggers.github.io/Tic-Counter-/ (GitHub Pages, main branch).
@@ -34,7 +34,7 @@ version keys and a matching HTML revision prevent incompatible offline bundles.
 The new worker retires old app caches without clearing localStorage.
 
 The calendar is always expanded and loads when a connection is available. System fonts and inline icons avoid font/icon network dependencies.
-New versions show **Update ready · reload**; counters keep working offline. ChatGPT needs a connection.
+Counters keep working offline. ChatGPT needs a connection.
 
 ## Development checks
 
