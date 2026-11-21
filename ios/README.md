@@ -24,8 +24,10 @@ to start with it. Both Personal targets use the same App Group. Keep their entit
 Shift.personalGroup constant in sync if you change the group. Open the app once
 after updating to move existing readings into the shared store. The original
 file is retained. Add Sterling Counters in medium or large. The six plus buttons
-save directly to the same counters without opening the app. Set Conversion pounds in Edit Widget, then tap Convert on the widget to show
-kilograms without opening Sterling. The Lock Screen widget opens Sterling.
+save directly to the same counters without opening the app. The large widget
+has a keypad that shows kilograms as you enter pounds. It uses the app's
+existing round-up rule. The medium widget uses Conversion pounds in Edit Widget
+and the Convert button. The Lock Screen widget opens Sterling.
 
 For Sterling, select the same paid team on both targets and register the App
 Group shown by Xcode. If the identifier is unavailable, change the group in both
@@ -34,6 +36,26 @@ prefixed with the app bundle ID. Sign both targets and build on a real iPhone
 before archiving. Add a small or medium Sterling Counters widget from the Home
 Screen gallery or the Open Sterling shortcut from the Lock Screen gallery.
 Widget writes and app writes use the same locked, atomically saved local file.
+
+## Siri and Messages
+
+After installing the updated app, open it once. Try "Siri, add one to Mix 2 in
+Sterling" and "Siri, get my Sterling totals." Use the installed app's name if
+Siri recognizes a different display name. Counting writes to the shared shift
+file and supports the existing Undo action.
+
+Create these in Apple's Shortcuts app once on your iPhone:
+
+| Shortcut name to say to Siri | Sterling action | Send Message recipient |
+| --- | --- | --- |
+| Text Sterling totals to Jamie | Get Sterling Totals, Tank Levels Only off | Select the intended Jamie from Contacts |
+| Text Sterling tank totals | Get Sterling Totals, Tank Levels Only on | Ask Each Time, or pass the result of Select Contact |
+
+Set the Send Message text to the output of Get Sterling Totals. Try each
+shortcut manually with a test recipient before enabling hands-free delivery.
+To send directly where iOS permits, turn off Show When Run in Send Message.
+iOS may prompt for permission the first time. Empty totals stop the shortcut
+with an error. Tank totals use the existing tank-level share format.
 
 ## Inviting people
 
