@@ -4,6 +4,10 @@ Compact, offline-ready shift counters at
 https://jasonjaggers.github.io/Tic-Counter-/ (GitHub Pages, main branch).
 No runtime packages, backend, embedded spreadsheet, API key or OAuth secret.
 
+## Native iPhone app
+
+The [Sterling iOS source and Xcode setup](ios/README.md) live under `ios/`.
+
 ## Report
 
 Choose **Report** from the menu, then type or use your keyboard microphone.

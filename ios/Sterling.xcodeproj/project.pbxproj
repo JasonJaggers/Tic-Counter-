@@ -1,0 +1,623 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		000000000000000000000010 /* Sources/Shared/Shift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000001 /* Sources/Shared/Shift.swift */; };
+		000000000000000000000011 /* Sources/Widget/SterlingWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000006 /* Sources/Widget/SterlingWidgets.swift */; };
+		000000000000000000000018 /* SterlingWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 000000000000000000000009 /* SterlingWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		00000000000000000000001A /* Sources/App/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000007 /* Sources/App/Assets.xcassets */; };
+		00000000000000000000001C /* Sources/Shared/Shift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000001 /* Sources/Shared/Shift.swift */; };
+		00000000000000000000001D /* Sources/App/Sterling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000002 /* Sources/App/Sterling.swift */; };
+		00000000000000000000001E /* Sources/App/Agenda.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000003 /* Sources/App/Agenda.swift */; };
+		00000000000000000000001F /* Sources/App/LegacyBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000004 /* Sources/App/LegacyBackup.swift */; };
+		000000000000000000000020 /* Sources/App/Links.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000005 /* Sources/App/Links.swift */; };
+		00000000000000000000002A /* Sources/App/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000007 /* Sources/App/Assets.xcassets */; };
+		00000000000000000000002C /* Sources/Shared/Shift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000001 /* Sources/Shared/Shift.swift */; };
+		00000000000000000000002D /* Sources/App/Sterling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000002 /* Sources/App/Sterling.swift */; };
+		00000000000000000000002E /* Sources/App/Agenda.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000003 /* Sources/App/Agenda.swift */; };
+		00000000000000000000002F /* Sources/App/LegacyBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000004 /* Sources/App/LegacyBackup.swift */; };
+		000000000000000000000030 /* Sources/App/Links.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000005 /* Sources/App/Links.swift */; };
+		000000000000000000000039 /* Sources/PersonalWidget/SterlingShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000037 /* Sources/PersonalWidget/SterlingShortcuts.swift */; };
+		000000000000000000000040 /* SterlingShortcuts.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 000000000000000000000038 /* SterlingShortcuts.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		000000000000000000000050 /* Shift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000001; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		000000000000000000000027 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00000000000000000000000F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000000000017;
+			remoteInfo = SterlingWidgets;
+		};
+		000000000000000000000042 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00000000000000000000000F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00000000000000000000003F;
+			remoteInfo = SterlingShortcuts;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		000000000000000000000019 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				000000000000000000000018 /* SterlingWidgets.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000041 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				000000000000000000000040 /* SterlingShortcuts.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		000000000000000000000001 /* Sources/Shared/Shift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Shared/Shift.swift; sourceTree = "<group>"; };
+		000000000000000000000002 /* Sources/App/Sterling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/Sterling.swift; sourceTree = "<group>"; };
+		000000000000000000000003 /* Sources/App/Agenda.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/Agenda.swift; sourceTree = "<group>"; };
+		000000000000000000000004 /* Sources/App/LegacyBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/LegacyBackup.swift; sourceTree = "<group>"; };
+		000000000000000000000005 /* Sources/App/Links.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/Links.swift; sourceTree = "<group>"; };
+		000000000000000000000006 /* Sources/Widget/SterlingWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Widget/SterlingWidgets.swift; sourceTree = "<group>"; };
+		000000000000000000000007 /* Sources/App/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Sources/App/Assets.xcassets; sourceTree = "<group>"; };
+		000000000000000000000008 /* Sterling.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sterling.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000009 /* SterlingWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SterlingWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000029 /* Sterling Personal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sterling Personal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000037 /* Sources/PersonalWidget/SterlingShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/PersonalWidget/SterlingShortcuts.swift; sourceTree = "<group>"; };
+		000000000000000000000038 /* SterlingShortcuts.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SterlingShortcuts.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		000000000000000000000013 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000022 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000032 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00000000000000000000003B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00000000000000000000000A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000008 /* Sterling.app */,
+				000000000000000000000009 /* SterlingWidgets.appex */,
+				000000000000000000000029 /* Sterling Personal.app */,
+				000000000000000000000038 /* SterlingShortcuts.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		00000000000000000000000B = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000001 /* Sources/Shared/Shift.swift */,
+				000000000000000000000002 /* Sources/App/Sterling.swift */,
+				000000000000000000000003 /* Sources/App/Agenda.swift */,
+				000000000000000000000004 /* Sources/App/LegacyBackup.swift */,
+				000000000000000000000005 /* Sources/App/Links.swift */,
+				000000000000000000000006 /* Sources/Widget/SterlingWidgets.swift */,
+				000000000000000000000007 /* Sources/App/Assets.xcassets */,
+				00000000000000000000000A /* Products */,
+				000000000000000000000037 /* Sources/PersonalWidget/SterlingShortcuts.swift */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		000000000000000000000017 /* SterlingWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000016 /* Build configuration list for PBXNativeTarget "SterlingWidgets" */;
+			buildPhases = (
+				000000000000000000000012 /* Sources */,
+				000000000000000000000013 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SterlingWidgets;
+			productName = SterlingWidgets;
+			productReference = 000000000000000000000009 /* SterlingWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		000000000000000000000026 /* Sterling */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000025 /* Build configuration list for PBXNativeTarget "Sterling" */;
+			buildPhases = (
+				000000000000000000000021 /* Sources */,
+				000000000000000000000022 /* Frameworks */,
+				00000000000000000000001B /* Resources */,
+				000000000000000000000019 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				000000000000000000000028 /* PBXTargetDependency */,
+			);
+			name = Sterling;
+			productName = Sterling;
+			productReference = 000000000000000000000008 /* Sterling.app */;
+			productType = "com.apple.product-type.application";
+		};
+		000000000000000000000036 /* Sterling Personal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000035 /* Build configuration list for PBXNativeTarget "Sterling Personal" */;
+			buildPhases = (
+				000000000000000000000031 /* Sources */,
+				000000000000000000000032 /* Frameworks */,
+				00000000000000000000002B /* Resources */,
+				000000000000000000000041 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				000000000000000000000043 /* PBXTargetDependency */,
+			);
+			name = "Sterling Personal";
+			productName = "Sterling Personal";
+			productReference = 000000000000000000000029 /* Sterling Personal.app */;
+			productType = "com.apple.product-type.application";
+		};
+		00000000000000000000003F /* SterlingShortcuts */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00000000000000000000003E /* Build configuration list for PBXNativeTarget "SterlingShortcuts" */;
+			buildPhases = (
+				00000000000000000000003A /* Sources */,
+				00000000000000000000003B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SterlingShortcuts;
+			productName = SterlingShortcuts;
+			productReference = 000000000000000000000038 /* SterlingShortcuts.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		00000000000000000000000F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					000000000000000000000017 = {
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					000000000000000000000026 = {
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 00000000000000000000000E /* Build configuration list for PBXProject "Sterling" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 00000000000000000000000B;
+			productRefGroup = 00000000000000000000000A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				000000000000000000000026 /* Sterling */,
+				000000000000000000000017 /* SterlingWidgets */,
+				000000000000000000000036 /* Sterling Personal */,
+				00000000000000000000003F /* SterlingShortcuts */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00000000000000000000001B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000001A /* Sources/App/Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00000000000000000000002B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000002A /* Sources/App/Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		000000000000000000000012 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000010 /* Sources/Shared/Shift.swift in Sources */,
+				000000000000000000000011 /* Sources/Widget/SterlingWidgets.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000021 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000001C /* Sources/Shared/Shift.swift in Sources */,
+				00000000000000000000001D /* Sources/App/Sterling.swift in Sources */,
+				00000000000000000000001E /* Sources/App/Agenda.swift in Sources */,
+				00000000000000000000001F /* Sources/App/LegacyBackup.swift in Sources */,
+				000000000000000000000020 /* Sources/App/Links.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000031 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000002C /* Sources/Shared/Shift.swift in Sources */,
+				00000000000000000000002D /* Sources/App/Sterling.swift in Sources */,
+				00000000000000000000002E /* Sources/App/Agenda.swift in Sources */,
+				00000000000000000000002F /* Sources/App/LegacyBackup.swift in Sources */,
+				000000000000000000000030 /* Sources/App/Links.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00000000000000000000003A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000039 /* Sources/PersonalWidget/SterlingShortcuts.swift in Sources */,
+				000000000000000000000050 /* Shift.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		000000000000000000000028 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000000000017 /* SterlingWidgets */;
+			targetProxy = 000000000000000000000027 /* PBXContainerItemProxy */;
+		};
+		000000000000000000000043 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00000000000000000000003F /* SterlingShortcuts */;
+			targetProxy = 000000000000000000000042 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00000000000000000000000C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 3.2.7;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		00000000000000000000000D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 3.2.7;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		000000000000000000000014 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Sources/Widget/Sterling.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/Widget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonjaggers.sterling.widgets;
+				PRODUCT_NAME = SterlingWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		000000000000000000000015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Sources/Widget/Sterling.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/Widget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonjaggers.sterling.widgets;
+				PRODUCT_NAME = SterlingWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		000000000000000000000023 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Sources/App/Sterling.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonjaggers.sterling;
+				PRODUCT_NAME = Sterling;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		000000000000000000000024 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Sources/App/Sterling.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonjaggers.sterling;
+				PRODUCT_NAME = Sterling;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		000000000000000000000033 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/App/PersonalInfo.plist;
+				CODE_SIGN_ENTITLEMENTS = Sources/App/Personal.entitlements;
+				REGISTER_APP_GROUPS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonjaggers.sterling.personal;
+				PRODUCT_NAME = "Sterling Personal";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) STERLING_PERSONAL";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		000000000000000000000034 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/App/PersonalInfo.plist;
+				CODE_SIGN_ENTITLEMENTS = Sources/App/Personal.entitlements;
+				REGISTER_APP_GROUPS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonjaggers.sterling.personal;
+				PRODUCT_NAME = "Sterling Personal";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) STERLING_PERSONAL";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		00000000000000000000003C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/PersonalWidget/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = Sources/PersonalWidget/Personal.entitlements;
+				REGISTER_APP_GROUPS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonjaggers.sterling.personal.shortcuts;
+				PRODUCT_NAME = SterlingShortcuts;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		00000000000000000000003D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Sources/PersonalWidget/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = Sources/PersonalWidget/Personal.entitlements;
+				REGISTER_APP_GROUPS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.2.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jasonjaggers.sterling.personal.shortcuts;
+				PRODUCT_NAME = SterlingShortcuts;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00000000000000000000000E /* Build configuration list for PBXProject "Sterling" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00000000000000000000000C /* Debug */,
+				00000000000000000000000D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000000000016 /* Build configuration list for PBXNativeTarget "SterlingWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000014 /* Debug */,
+				000000000000000000000015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000000000025 /* Build configuration list for PBXNativeTarget "Sterling" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000023 /* Debug */,
+				000000000000000000000024 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000000000035 /* Build configuration list for PBXNativeTarget "Sterling Personal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000033 /* Debug */,
+				000000000000000000000034 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00000000000000000000003E /* Build configuration list for PBXNativeTarget "SterlingShortcuts" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00000000000000000000003C /* Debug */,
+				00000000000000000000003D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 00000000000000000000000F /* Project object */;
+}
