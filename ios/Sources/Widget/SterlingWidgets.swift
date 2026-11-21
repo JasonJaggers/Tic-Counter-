@@ -50,11 +50,13 @@ struct ShiftWidgetView: View {
 
     var body: some View {
         Group {
-            if family == .accessoryRectangular {
-                VStack(alignment: .leading) {
-                    Text("Sterling").font(.headline)
-                    Text("Open shift counters").font(.caption)
-                }
+            if family == .accessoryCircular {
+                Image("Brand", bundle: .main)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 36, height: 36)
+                    .clipShape(.rect(cornerRadius: 5))
+                    .accessibilityLabel("Open Sterling")
             } else {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Sterling").font(.headline).foregroundStyle(mint)
@@ -103,6 +105,6 @@ struct SterlingWidgets: Widget {
         }
         .configurationDisplayName("Sterling Counters")
         .description("Add mixes and unloads from the Home Screen or open Sterling from the Lock Screen.")
-        .supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular])
+        .supportedFamilies([.systemSmall, .systemMedium, .accessoryCircular])
     }
 }
