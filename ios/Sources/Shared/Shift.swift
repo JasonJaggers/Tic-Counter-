@@ -1,11 +1,12 @@
 import Foundation
 
 enum ShiftError: LocalizedError {
-    case invalidReading, unavailable, maximum, existingData
+    case invalidReading, unavailable, maximum, existingData, emptyTotals
     var errorDescription: String? {
         switch self {
         case .invalidReading: return "Enter a number within the allowed range."
         case .unavailable: return "Sterling storage is unavailable. Check the App Group configuration."
+        case .emptyTotals: return "There are no Sterling totals to send."
         case .maximum: return "This counter has reached its maximum."
         case .existingData: return "Import requires an empty workspace. Export a backup before replacing any records."
         }
@@ -44,6 +45,7 @@ struct Shift: Codable {
     var reportDay: String?
     var draft = ""
     var convertedWidgetPounds: Double?
+    var widgetPoundsInput: String?
 
     static func workday(_ date: Date = Date()) -> String {
         var calendar = Calendar(identifier: .gregorian)
@@ -125,6 +127,35 @@ struct Shift: Codable {
         }
         if (Double(readings.amd) ?? 0) > 0 { lines.append("AMD: \(readings.amd)%") }
         return lines.joined(separator: "\n")
+    }
+
+    func totalsForMessage(tankLevelsOnly: Bool) throws -> String {
+        let levels = share(levels: true)
+        let counts = tankLevelsOnly ? "" : share(levels: false)
+        let sections = [(counts, "Counts and readings"), (levels, "Tank levels")]
+        let message = sections.compactMap { values, title in
+            values.isEmpty ? nil : "\(title)\n\(values)"
+        }.joined(separator: "\n\n")
+        guard !message.isEmpty else { throw ShiftError.emptyTotals }
+        return message
+    }
+
+    mutating func enterWidgetPoundsKey(_ key: String) throws {
+        let input = widgetPoundsInput ?? ""
+        switch key {
+        case "clear":
+            widgetPoundsInput = ""
+        case "delete":
+            widgetPoundsInput = String(input.dropLast())
+        case ".":
+            guard !input.contains("."), input.count < 12 else { return }
+            widgetPoundsInput = input.isEmpty ? "0." : input + "."
+        case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
+            guard input.count < 12 else { return }
+            widgetPoundsInput = input == "0" ? key : input + key
+        default:
+            throw ShiftError.invalidReading
+        }
     }
 
     func csv(_ date: Date = Date()) -> String {
