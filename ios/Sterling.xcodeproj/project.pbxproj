@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000000000000000000000062 /* SterlingIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000061; };
+		000000000000000000000063 /* SterlingIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000061; };
 		000000000000000000000010 /* Sources/Shared/Shift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000001 /* Sources/Shared/Shift.swift */; };
 		000000000000000000000011 /* Sources/Widget/SterlingWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000006 /* Sources/Widget/SterlingWidgets.swift */; };
 		000000000000000000000018 /* SterlingWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 000000000000000000000009 /* SterlingWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -70,6 +72,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		000000000000000000000061 /* SterlingIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/SterlingIntents.swift; sourceTree = "<group>"; };
 		000000000000000000000001 /* Sources/Shared/Shift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Shared/Shift.swift; sourceTree = "<group>"; };
 		000000000000000000000002 /* Sources/App/Sterling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/Sterling.swift; sourceTree = "<group>"; };
 		000000000000000000000003 /* Sources/App/Agenda.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/Agenda.swift; sourceTree = "<group>"; };
@@ -130,6 +133,7 @@
 		00000000000000000000000B = {
 			isa = PBXGroup;
 			children = (
+				000000000000000000000061 /* SterlingIntents.swift */,
 				000000000000000000000001 /* Sources/Shared/Shift.swift */,
 				000000000000000000000002 /* Sources/App/Sterling.swift */,
 				000000000000000000000003 /* Sources/App/Agenda.swift */,
@@ -295,6 +299,7 @@
 			files = (
 				00000000000000000000001C /* Sources/Shared/Shift.swift in Sources */,
 				00000000000000000000001D /* Sources/App/Sterling.swift in Sources */,
+				000000000000000000000062 /* SterlingIntents.swift in Sources */,
 				00000000000000000000001E /* Sources/App/Agenda.swift in Sources */,
 				00000000000000000000001F /* Sources/App/LegacyBackup.swift in Sources */,
 				000000000000000000000020 /* Sources/App/Links.swift in Sources */,
@@ -307,6 +312,7 @@
 			files = (
 				00000000000000000000002C /* Sources/Shared/Shift.swift in Sources */,
 				00000000000000000000002D /* Sources/App/Sterling.swift in Sources */,
+				000000000000000000000063 /* SterlingIntents.swift in Sources */,
 				00000000000000000000002E /* Sources/App/Agenda.swift in Sources */,
 				00000000000000000000002F /* Sources/App/LegacyBackup.swift in Sources */,
 				000000000000000000000030 /* Sources/App/Links.swift in Sources */,
