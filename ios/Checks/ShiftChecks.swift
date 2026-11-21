@@ -13,6 +13,26 @@ struct ShiftChecks {
         precondition(shift.share(levels: false) == "Mix 1: 1")
         try shift.setLevel("AA", "9,5")
         precondition(shift.share(levels: true) == "AA: 9.5%")
+        let allTotals = try shift.totalsForMessage(tankLevelsOnly: false)
+        precondition(allTotals == "Counts and readings\nMix 1: 1\n\nTank levels\nAA: 9.5%")
+        let tankTotals = try shift.totalsForMessage(tankLevelsOnly: true)
+        precondition(tankTotals == "Tank levels\nAA: 9.5%")
+        let empty = Shift()
+        do {
+            _ = try empty.totalsForMessage(tankLevelsOnly: false)
+            fatalError("Empty totals must stop before the send action")
+        } catch ShiftError.emptyTotals {}
+        let oldEncoding = try JSONEncoder().encode(empty)
+        var keypad = try JSONDecoder().decode(Shift.self, from: oldEncoding)
+        precondition(keypad.widgetPoundsInput == nil)
+        for key in ["2", ".", "2", "0", "5", "7", "delete"] {
+            try keypad.enterWidgetPoundsKey(key)
+        }
+        precondition(keypad.widgetPoundsInput == "2.205")
+        precondition(keypad.widgetPoundsInput.flatMap(Double.init).flatMap(Shift.kilograms(from:)) == 1)
+        try keypad.enterWidgetPoundsKey("clear")
+        precondition(keypad.widgetPoundsInput == "")
+        precondition(keypad.readings == empty.readings)
         shift.reset(levels: true)
         precondition(shift.archives.first?.readings.levels["AA"] == "9.5")
         shift.undoLevels()
