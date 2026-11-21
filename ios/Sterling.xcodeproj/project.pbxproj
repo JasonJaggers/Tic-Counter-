@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000000000000000000000065 /* Brand.png in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000064; };
+		000000000000000000000066 /* Brand.png in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000064; };
 		000000000000000000000062 /* SterlingIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000061; };
 		000000000000000000000063 /* SterlingIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000061; };
 		000000000000000000000010 /* Sources/Shared/Shift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000001 /* Sources/Shared/Shift.swift */; };
@@ -72,6 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		000000000000000000000064 /* Brand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sources/App/Assets.xcassets/Brand.imageset/Brand.png; sourceTree = "<group>"; };
 		000000000000000000000061 /* SterlingIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/SterlingIntents.swift; sourceTree = "<group>"; };
 		000000000000000000000001 /* Sources/Shared/Shift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Shared/Shift.swift; sourceTree = "<group>"; };
 		000000000000000000000002 /* Sources/App/Sterling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/App/Sterling.swift; sourceTree = "<group>"; };
@@ -141,6 +144,7 @@
 				000000000000000000000005 /* Sources/App/Links.swift */,
 				000000000000000000000006 /* Sources/Widget/SterlingWidgets.swift */,
 				000000000000000000000007 /* Sources/App/Assets.xcassets */,
+				000000000000000000000064 /* Brand.png */,
 				00000000000000000000000A /* Products */,
 				000000000000000000000037 /* Sources/PersonalWidget/SterlingShortcuts.swift */,
 			);
@@ -155,6 +159,7 @@
 			buildPhases = (
 				000000000000000000000012 /* Sources */,
 				000000000000000000000013 /* Frameworks */,
+				000000000000000000000067 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -209,6 +214,7 @@
 			buildPhases = (
 				00000000000000000000003A /* Sources */,
 				00000000000000000000003B /* Frameworks */,
+				000000000000000000000068 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -278,6 +284,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				00000000000000000000002A /* Sources/App/Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000067 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000065 /* Brand.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		000000000000000000000068 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000066 /* Brand.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
