@@ -24,17 +24,17 @@ to start with it. Both Personal targets use the same App Group. Keep their entit
 Shift.personalGroup constant in sync if you change the group. Open the app once
 after updating to move existing readings into the shared store. The original
 file is retained. Add Sterling Counters in medium or large. The six plus buttons
-save directly to the same counters without opening the app. The large widget
-has a keypad that shows kilograms as you enter pounds. It uses the app's
-existing round-up rule. The medium widget uses Conversion pounds in Edit Widget
-and the Convert button. The Lock Screen widget opens Sterling.
+save directly to the same counters without opening the app. Add the separate
+medium Sterling Converter widget for a keypad that shows kilograms as you
+enter pounds. It uses the app's existing round-up rule. On the Lock Screen,
+add the single-slot Sterling logo and tap it to open the app.
 
 For Sterling, select the same paid team on both targets and register the App
 Group shown by Xcode. If the identifier is unavailable, change the group in both
 entitlements files and the Shift.group constant. Keep the widget bundle ID
 prefixed with the app bundle ID. Sign both targets and build on a real iPhone
 before archiving. Add a small or medium Sterling Counters widget from the Home
-Screen gallery or the Open Sterling shortcut from the Lock Screen gallery.
+Screen gallery or the Sterling logo from the Lock Screen gallery.
 Widget writes and app writes use the same locked, atomically saved local file.
 
 ## Siri and Messages
