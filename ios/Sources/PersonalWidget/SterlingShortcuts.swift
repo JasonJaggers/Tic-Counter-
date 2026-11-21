@@ -33,6 +33,22 @@ struct ConvertWidgetPounds: AppIntent {
     }
 }
 
+struct EnterWidgetPoundsKey: AppIntent {
+    static let title: LocalizedStringResource = "Enter a Sterling converter key"
+    static let isDiscoverable = false
+    @Parameter(title: "Key") var key: String
+
+    init() {}
+    init(_ key: String) { self.key = key }
+
+    func perform() async throws -> some IntentResult {
+        try ShiftStore.personalWidget().update(requiresExisting: true) {
+            try $0.enterWidgetPoundsKey(key)
+        }
+        return .result()
+    }
+}
+
 struct SterlingWidgetOptions: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "Sterling Counters"
     static let description = IntentDescription("Set a pounds value to show its conversion on the widget.")
@@ -44,11 +60,12 @@ struct CounterEntry: TimelineEntry {
     let counts: [String: Int]?
     let pounds: Double
     let convertedKilograms: Int?
+    var liveInput = ""
 }
 
 struct CounterProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> CounterEntry {
-        CounterEntry(date: .now, counts: ["Mix 2": 1], pounds: 100, convertedKilograms: nil)
+        CounterEntry(date: .now, counts: ["Mix 2": 1], pounds: 100, convertedKilograms: nil, liveInput: "100")
     }
 
     func snapshot(for configuration: SterlingWidgetOptions, in context: Context) async -> CounterEntry {
@@ -67,7 +84,8 @@ struct CounterProvider: AppIntentTimelineProvider {
         }
         let pounds = configuration.pounds ?? -1
         let kilograms = shift?.convertedWidgetPounds == pounds ? Shift.kilograms(from: pounds) : nil
-        return CounterEntry(date: .now, counts: shift?.readings.counts, pounds: pounds, convertedKilograms: kilograms)
+        return CounterEntry(date: .now, counts: shift?.readings.counts, pounds: pounds, convertedKilograms: kilograms,
+                            liveInput: shift?.widgetPoundsInput ?? "")
     }
 }
 
@@ -94,7 +112,7 @@ struct SterlingCounterWidget: View {
                 }
             } else if let counts = entry.counts {
                 VStack(spacing: family == .systemLarge ? 10 : 5) {
-                    conversion
+                    if family == .systemLarge { liveConverter } else { conversion }
                     row(Array(Shift.counts.prefix(3)), counts: counts)
                     row(Array(Shift.counts.suffix(3)), counts: counts)
                 }
@@ -106,6 +124,47 @@ struct SterlingCounterWidget: View {
         }
         .widgetURL(counters)
         .containerBackground(background, for: .widget)
+    }
+
+    private var liveConverter: some View {
+        VStack(spacing: 4) {
+            HStack {
+                Text(entry.liveInput.isEmpty ? "Pounds" : "\(entry.liveInput) lb")
+                    .foregroundStyle(labelColor)
+                Spacer()
+                if let pounds = Double(entry.liveInput), let kg = Shift.kilograms(from: pounds) {
+                    Text("\(kg.formatted()) kg").foregroundStyle(highlightColor)
+                } else {
+                    Text("— kg").foregroundStyle(labelColor)
+                }
+            }
+            .font(.subheadline.weight(.semibold))
+            .monospacedDigit()
+            .lineLimit(1)
+            .minimumScaleFactor(0.65)
+
+            keypadRow(["7", "8", "9", "delete"])
+            keypadRow(["4", "5", "6", "clear"])
+            keypadRow(["1", "2", "3", "0", "."])
+        }
+        .padding(7)
+        .background { panel(card, radius: 10) }
+    }
+
+    private func keypadRow(_ keys: [String]) -> some View {
+        HStack(spacing: 4) {
+            ForEach(keys, id: \.self) { key in
+                Button(intent: EnterWidgetPoundsKey(key)) {
+                    Text(key == "delete" ? "⌫" : key == "clear" ? "Clear" : key)
+                        .font(.caption.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 24)
+                        .background { panel(action, radius: 5) }
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(highlightColor)
+                .accessibilityLabel(key == "delete" ? "Delete last digit" : key == "." ? "Decimal point" : key)
+            }
+        }
     }
 
     private var conversion: some View {
@@ -143,20 +202,20 @@ struct SterlingCounterWidget: View {
             ForEach(names, id: \.self) { name in
                 let count = counts[name, default: 0]
                 if family == .systemLarge {
-                    VStack(spacing: 5) {
+                    VStack(spacing: 2) {
                         Text(name.uppercased()).font(.caption.weight(.semibold)).foregroundStyle(labelColor)
                         Spacer(minLength: 0)
-                        Text(count == 0 ? " " : count.formatted()).font(.title.weight(.semibold))
+                        Text(count == 0 ? " " : count.formatted()).font(.title3.weight(.semibold))
                             .monospacedDigit().lineLimit(1).minimumScaleFactor(0.5)
                             .foregroundStyle(isAccented ? Color.primary : .white).privacySensitive()
                         Spacer(minLength: 0)
                         increment(name, count: count) {
                             Image(systemName: "plus").font(.title3.weight(.semibold))
-                                .frame(maxWidth: .infinity, minHeight: 39)
+                                .frame(maxWidth: .infinity, minHeight: 30)
                                 .background { panel(action, radius: 8) }
                         }
                     }
-                    .padding(7)
+                    .padding(5)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background { panel(card, radius: 12) }
                 } else {
